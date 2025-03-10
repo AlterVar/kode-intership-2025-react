@@ -44,6 +44,14 @@ const GlobalStyles = createGlobalStyle`
 		background-color: #fff;
 		color: #050510;
 	}
+
+	.container {
+		min-width: 320px;
+  	padding: 16px;
+		display: flex; 
+		flex-direction: column; 
+		gap: 14px;
+	}
 `;
 
 export default GlobalStyles;

@@ -1,11 +1,5 @@
 import styled from "styled-components";
 
-const Container = styled.div`
-  min-width: 320px;
-  padding: 16px;
-  padding-bottom: 14px;
-`;
-
 const H2 = styled.h2`
   font-family: "InterBold", sans-serif;
   font-size: 2.4rem;
@@ -49,7 +43,7 @@ const FilterIcon = styled.div`
 
 const Search = () => {
   return (
-    <Container>
+    <div>
       <H2>Поиск</H2>
       <div style={{ position: "relative" }}>
         <SearchIcon className="search-icon">
@@ -82,7 +76,7 @@ const Search = () => {
           </svg>
         </FilterIcon>
       </div>
-    </Container>
+    </div>
   );
 };
 
