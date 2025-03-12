@@ -1,3 +1,6 @@
+import { store } from "./app/store";
+import { Provider } from "react-redux";
+
 import GlobalStyles from "./components/styles/GlobalStyles";
 
 import Search from "./components/Search";
@@ -6,12 +9,14 @@ import CardsList from "./components/CardsList";
 
 function App() {
   return (
-    <div className="container">
-      <GlobalStyles />
-      <Search />
-			<Pagination />
-			<CardsList />
-    </div>
+    <Provider store={store}>
+      <div className="container">
+        <GlobalStyles />
+        <Search />
+        <Pagination />
+        <CardsList />
+      </div>
+    </Provider>
   );
 }
 
