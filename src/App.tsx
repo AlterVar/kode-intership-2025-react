@@ -1,11 +1,11 @@
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 
-import GlobalStyles from "./components/styles/GlobalStyles";
+import GlobalStyles from "./assets/styles/GlobalStyles";
 
 import Search from "./components/Search";
 import Pagination from "./components/Pagination";
-import CardsList from "./components/CardsList";
+import CardsList from "./components/People/CardsList";
 
 function App() {
   return (
