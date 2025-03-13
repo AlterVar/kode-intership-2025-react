@@ -27,10 +27,16 @@ const Card = styled.li`
   cursor: pointer;
 
   .image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 72px;
     height: 72px;
     border-radius: 50%;
     background: linear-gradient(90deg, #f3f3f6 0%, #fafafa 100%);
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .content {
@@ -78,13 +84,13 @@ const LoadingError = styled.div`
     }
 
     .try-again {
-			font-family: "InterSemiBold", sans-serif;
-			font-size: 1.6rem;
-			color: #6534ff;
-			background-color: transparent;
-			outline: none;
-			border: none;
-			cursor: pointer;
+      font-family: "InterSemiBold", sans-serif;
+      font-size: 1.6rem;
+      color: #6534ff;
+      background-color: transparent;
+      outline: none;
+      border: none;
+      cursor: pointer;
     }
   }
 `;
@@ -134,7 +140,7 @@ const CardsList = (): JSX.Element => {
     return () => {
       isNeedUpdate = false;
     };
-  }, []);
+	}, []);
 
   return (
     <main>
@@ -215,16 +221,16 @@ const CardsList = (): JSX.Element => {
         {loadingStatus.value === "idle" &&
           people.current?.map((person: PersonType) => (
             <Card key={person.id}>
-              <div
-                className="image-container"
-                style={{ backgroundImage: person.avatarUrl }}
-              >
-                {/* <img src={person.avatarUrl} alt="avatar" /> */}
+              <div className="image-container">
+                <img
+                  src={person.avatarUrl}
+                  alt="avatar"
+                />
               </div>
               <div className="content">
                 <Name>
                   {person.firstName + " " + person.lastName}
-                  <span>{person.userTag}</span>
+                  <span>{" " + person.userTag}</span>
                 </Name>
                 <Profession>{person.position}</Profession>
               </div>
