@@ -1,7 +1,7 @@
 import styled from "styled-components";
-
-import type { PersonType } from "../../../types/PersonType";
 import { JSX } from "react";
+
+import type { PersonType } from "../../../types/PersonType"
 
 type propsType = {
   person: PersonType;

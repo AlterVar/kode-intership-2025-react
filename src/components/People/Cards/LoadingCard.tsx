@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
-import type { loadingStatusType } from "../../../app/features/loadingSlice";
 import { JSX } from "react";
-import { useAppSelector } from "../../../app/hooks";
 
 const LoadingCard = styled.li`
   display: flex;
@@ -38,22 +36,15 @@ const LoadingCard = styled.li`
 `;
 
 const Card = (): JSX.Element => {
-  const loadingStatus: loadingStatusType = useAppSelector(
-    (state) => state.loading
-  );
 
   return (
-    <>
-      {loadingStatus.value === "loading" && (
-        <LoadingCard>
-          <div className="image-container"></div>
-          <div className="content">
-            <h3></h3>
-            <p></p>
-          </div>
-        </LoadingCard>
-      )}
-    </>
+    <LoadingCard>
+      <div className="image-container"></div>
+      <div className="content">
+        <h3></h3>
+        <p></p>
+      </div>
+    </LoadingCard>
   );
 };
 
