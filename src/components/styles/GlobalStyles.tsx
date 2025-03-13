@@ -51,6 +51,13 @@ const GlobalStyles = createGlobalStyle`
 		display: flex; 
 		flex-direction: column; 
 		gap: 14px;
+
+		height: 100vh;
+    box-sizing: border-box;
+	}
+
+	main {
+		flex-grow: 1;
 	}
 `;
 
