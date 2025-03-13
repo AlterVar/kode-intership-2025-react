@@ -1,19 +1,16 @@
 import styled from "styled-components";
-import { JSX, RefObject, useEffect, useRef } from "react";
-import axios, { AxiosResponse } from "axios";
+import { JSX, RefObject } from "react";
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import {
-  loadingStatusType,
-  showError,
-  showPeople,
-} from "../../app/features/loadingSlice";
+import { useAppSelector, /* useAppDispatch */ } from "../../app/hooks";
+import { loadingStatusType } from "../../app/features/loadingSlice";
 
 import IdleCard from "./Cards/IdleCard";
 import LoadingCard from "./Cards/LoadingCard";
 import LoadingError from "../Error/LoadingError";
 
 import type { PersonType } from "../../types/PersonType";
+import useAxios from "../../utils/requestUtil";
+import { departments } from "../../types/requestParamsType";
 
 const Cards = styled.ul`
   display: flex;
@@ -24,30 +21,10 @@ const CardsList = (): JSX.Element => {
   const loadingStatus: loadingStatusType = useAppSelector(
     (state) => state.loading
   );
-  const dispatch = useAppDispatch();
 
-  const people: RefObject<PersonType[] | null> = useRef(null);
-  let isNeedUpdate = true;
-
-  useEffect(() => {
-    if (isNeedUpdate && people.current === null) {
-      axios
-        .get(
-          "https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users?__example=all"
-        )
-        .then(function (response: AxiosResponse) {
-          people.current = response.data.items;
-          dispatch(showPeople());
-        })
-        .catch(function () {
-          dispatch(showError());
-        });
-    }
-    return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      isNeedUpdate = false;
-    };
-  }, []);
+    const people: RefObject<PersonType[] | null> = useAxios({
+      __example: departments["Все"],
+    });
 
   return (
     <main>
