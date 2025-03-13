@@ -1,16 +1,15 @@
 import styled from "styled-components";
-import { JSX, RefObject } from "react";
+import { JSX, useEffect } from "react";
 
-import { useAppSelector, /* useAppDispatch */ } from "../../app/hooks";
-import { loadingStatusType } from "../../app/features/loadingSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchPeople, loadingStatusType } from "../../app/features/peopleSlice";
 
 import IdleCard from "./Cards/IdleCard";
 import LoadingCard from "./Cards/LoadingCard";
 import LoadingError from "../Error/LoadingError";
 
 import type { PersonType } from "../../types/PersonType";
-import useAxios from "../../utils/requestUtil";
-import { departments } from "../../types/requestParamsType";
+import { departments } from "../../types/RequestParamsType";
 
 const Cards = styled.ul`
   display: flex;
@@ -20,18 +19,26 @@ const Cards = styled.ul`
 const CardsList = (): JSX.Element => {
   const loadingStatus: loadingStatusType = useAppSelector(
     (state) => state.loading
-  );
-
-    const people: RefObject<PersonType[] | null> = useAxios({
-      __example: departments["Все"],
-    });
+	);
+	const dispatch = useAppDispatch();
+		let isNeedUpdate = true;
+	
+		useEffect(() => {
+			if (isNeedUpdate) {
+				dispatch(fetchPeople({ __example: departments["Все"] }))
+				return () => {
+					// eslint-disable-next-line react-hooks/exhaustive-deps
+					isNeedUpdate = false;
+				};
+			}
+		}, []);
 
   return (
     <main>
-      {loadingStatus.value === "failed" && <LoadingError />}
+      {loadingStatus.state === "failed" && <LoadingError />}
 
       <Cards>
-        {loadingStatus.value === "loading" && (
+        {loadingStatus.state === "loading" && (
           <>
             <LoadingCard />
             <LoadingCard />
@@ -44,8 +51,9 @@ const CardsList = (): JSX.Element => {
           </>
         )}
 
-        {loadingStatus.value === "idle" &&
-          people.current?.map((person: PersonType) => (
+        {loadingStatus.state === "idle" &&
+          loadingStatus.people.length > 0 &&
+          loadingStatus.people.map((person: PersonType) => (
             <IdleCard key={person.id} person={person} />
           ))}
       </Cards>
