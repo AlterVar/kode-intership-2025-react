@@ -18,7 +18,7 @@ const Cards = styled.ul`
 
 const CardsList = (): JSX.Element => {
   const loadingStatus: loadingStatusType = useAppSelector(
-    (state) => state.loading
+    (state) => state.people
 	);
 	const dispatch = useAppDispatch();
 		let isNeedUpdate = true;

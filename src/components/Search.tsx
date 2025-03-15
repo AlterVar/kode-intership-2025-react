@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
 import { TbListTree } from "react-icons/tb";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { openModal } from "../app/features/sortingSlice";
+import { openModal } from "../app/features/modalSlice";
 import { sortingType } from "../types/SortingType";
 
 const H2 = styled.h2`
@@ -52,7 +52,6 @@ const SortIcon = styled.div<{ $birthdaySort?: boolean }>`
   cursor: pointer;
 
   svg {
-    /* stroke: #c3c3c6; */
 		stroke: ${(props) => (props.$birthdaySort ? "#6534ff" : "#c3c3c6")};
     width: 24px;
     height: 24px;
@@ -60,7 +59,7 @@ const SortIcon = styled.div<{ $birthdaySort?: boolean }>`
 `;
 
 const Search = () => {
-	const modalState = useAppSelector((state) => state.sorting.sortingType);
+	const modalState = useAppSelector((state) => state.people.sorting);
 	const dispatch = useAppDispatch(); 
 
 	const showModal = () => {

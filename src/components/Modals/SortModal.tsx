@@ -3,7 +3,9 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import styled from "styled-components";
 
 import { IoClose } from "react-icons/io5";
-import { changeSorting, closeModal } from "../../app/features/sortingSlice";
+import { closeModal } from "../../app/features/modalSlice";
+import { changeSorting } from "../../app/features/peopleSlice"; 
+
 import { sortingType } from "../../types/SortingType";
 
 const Container = styled.dialog`
@@ -100,7 +102,7 @@ const CustomRadio = styled.span`
 const SortModal = () => {
   const dialog: RefObject<HTMLDialogElement | null> = useRef(null);
   const chosenRadio: RefObject<EventTarget | null> = useRef(null);
-  const modalState = useAppSelector((state) => state.sorting);
+  const modalState = useAppSelector((state) => state.modal);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -123,7 +125,7 @@ const SortModal = () => {
     }
   };
 
-  const sortPeople = (e: MouseEvent) => {
+  const chooseSort = (e: MouseEvent) => {
     if (chosenRadio.current !== e.target) {
       chosenRadio.current = e.target;
       const value = e.currentTarget.getAttribute("value");
@@ -148,7 +150,7 @@ const SortModal = () => {
                 type="radio"
                 name="people"
                 value={sortingType.alphabetic}
-                onClick={sortPeople}
+                onClick={chooseSort}
                 defaultChecked
               />
               <CustomRadio />
@@ -159,7 +161,7 @@ const SortModal = () => {
                 type="radio"
                 name="people"
                 value={sortingType.birthday}
-                onClick={sortPeople}
+                onClick={chooseSort}
               />
               <CustomRadio />
               По дню рождения
