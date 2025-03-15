@@ -1,9 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export enum sortingType {
-  "alphabetic",
-  "birthday",
-}
+import { sortingType } from "../../types/SortingType";
 
 export type sortingStateType = {
 	isOpen: boolean,

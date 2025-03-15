@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { IoClose } from "react-icons/io5";
 import { closeModal } from "../../app/features/sortingSlice";
+import { sortingType } from "../../types/SortingType";
 
 const Container = styled.dialog`
   width: 373px;
@@ -137,7 +138,7 @@ const SortModal = () => {
               <input
                 type="radio"
                 name="people"
-                value="alphabetic"
+                value={sortingType.alphabetic}
                 ref={chosenRadio}
               />
               <CustomRadio />
@@ -147,7 +148,7 @@ const SortModal = () => {
               <input
                 type="radio"
                 name="people"
-                value="birthday"
+                value={sortingType.birthday}
                 ref={chosenRadio}
               />
               <CustomRadio />
