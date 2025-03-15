@@ -45,7 +45,7 @@ const GlobalStyles = createGlobalStyle`
 		color: #050510;
 		scrollbar-gutter: stable;
 
-		&:has(dialog) {
+		&:has(.modalOpen) {
 			overflow: hidden;
 		}
 	}

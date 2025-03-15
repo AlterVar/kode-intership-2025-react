@@ -133,7 +133,7 @@ const SortModal = () => {
   };
 
   return (
-    <div>
+    <div className={modalState.isOpen ? "modalOpen" : "modalClose"}>
       <Container ref={dialog} onClick={hideModalUsingBackdrop}>
         <Content>
           <Header>
