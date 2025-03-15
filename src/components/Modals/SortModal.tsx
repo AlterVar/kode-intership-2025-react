@@ -1,7 +1,9 @@
-import { MouseEvent, RefObject, useEffect, useRef, useState } from "react";
+import { MouseEvent, RefObject, useEffect, useRef } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import styled from "styled-components";
 
 import { IoClose } from "react-icons/io5";
+import { closeModal } from "../../app/features/sortingSlice";
 
 const Container = styled.dialog`
   width: 373px;
@@ -18,6 +20,7 @@ const Container = styled.dialog`
 
   &::backdrop {
     background-color: rgba(5, 5, 16, 0.16);
+    cursor: pointer;
   }
 `;
 
@@ -96,64 +99,63 @@ const CustomRadio = styled.span`
 const SortModal = () => {
   const dialog: RefObject<HTMLDialogElement | null> = useRef(null);
   const chosenRadio: RefObject<HTMLInputElement | null> = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const modalState = useAppSelector((state) => state.sorting);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dialog.current?.showModal();
-  }, [isOpen]);
+    if (+modalState.isOpen === 1) {
+      dialog.current?.showModal();
+    } else {
+      dialog.current?.close();
+    }
+  }, [modalState.isOpen]);
 
-  const openModal = () => {
-    setIsOpen(true);
+  const hideModal = (event: MouseEvent) => {
+    event.stopPropagation();
+    dispatch(closeModal());
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const closeModalUsingBackdrop = (event: MouseEvent) => {
+  const hideModalUsingBackdrop = (event: MouseEvent) => {
     if (event.target === dialog.current) {
       event.stopPropagation();
-      setIsOpen(false);
+      dispatch(closeModal());
     }
   };
 
   return (
     <div>
-      <button onClick={openModal}>Show</button>
-      {isOpen && (
-        <Container ref={dialog} onClick={closeModalUsingBackdrop}>
-          <Content>
-            <Header>
-              <h2>Сортировка</h2>
-              <button onClick={closeModal}>
-                <IoClose />
-              </button>
-            </Header>
-            <div>
-              <InputContainer>
-                <input
-                  type="radio"
-                  name="people"
-                  value="alphabetic"
-                  ref={chosenRadio}
-                />
-                <CustomRadio />
-                По алфавиту
-              </InputContainer>
-              <InputContainer>
-                <input
-                  type="radio"
-                  name="people"
-                  value="birthday"
-                  ref={chosenRadio}
-                />
-                <CustomRadio />
-                По дню рождения
-              </InputContainer>
-            </div>
-          </Content>
-        </Container>
-      )}
+      <Container ref={dialog} onClick={hideModalUsingBackdrop}>
+        <Content>
+          <Header>
+            <h2>Сортировка</h2>
+            <button onClick={hideModal}>
+              <IoClose />
+            </button>
+          </Header>
+          <div>
+            <InputContainer>
+              <input
+                type="radio"
+                name="people"
+                value="alphabetic"
+                ref={chosenRadio}
+              />
+              <CustomRadio />
+              По алфавиту
+            </InputContainer>
+            <InputContainer>
+              <input
+                type="radio"
+                name="people"
+                value="birthday"
+                ref={chosenRadio}
+              />
+              <CustomRadio />
+              По дню рождения
+            </InputContainer>
+          </div>
+        </Content>
+      </Container>
     </div>
   );
 };

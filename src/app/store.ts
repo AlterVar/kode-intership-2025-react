@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import peopleSlice from "./features/peopleSlice";
+import sortingSlice from "./features/sortingSlice";
 
 export const store = configureStore({
   reducer: {
-    loading: peopleSlice,
+		loading: peopleSlice,
+		sorting: sortingSlice,
   },
 });
 
