@@ -33,6 +33,19 @@ const CardsList = (): JSX.Element => {
 			}
 		}, []);
 
+  const checkYear = (
+    person: PersonType,
+    index: number,
+    array: PersonType[]
+  ) => {
+    if (array.length - 1 !== index) {
+      const current = new Date(person.birthday).getFullYear();
+      const next = new Date(array[index + 1].birthday).getFullYear();
+
+      return current === next;
+    }
+  };
+
   return (
     <main>
       {loadingStatus.state === "failed" && <LoadingError />}
@@ -53,9 +66,19 @@ const CardsList = (): JSX.Element => {
 
         {loadingStatus.state === "idle" &&
           loadingStatus.people.length > 0 &&
-          loadingStatus.people.map((person: PersonType) => (
-            <IdleCard key={person.id} person={person} />
-          ))}
+          loadingStatus.people.map((person: PersonType, index, array) => {
+            if (checkYear(person, index, array)) {
+              return (
+                <IdleCard key={person.id} person={person} divider={false} />
+              );
+            } else {
+              return (
+                <div key={person.id}>
+									<IdleCard person={person} divider={ true }/>
+                </div>
+              );
+            }
+          })}
       </Cards>
     </main>
   );
