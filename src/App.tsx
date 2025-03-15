@@ -6,12 +6,14 @@ import GlobalStyles from "./assets/styles/GlobalStyles";
 import Search from "./components/Search";
 import Pagination from "./components/Pagination";
 import CardsList from "./components/People/CardsList";
+import SortPopup from "./components/Modals/SortModal";
 
 function App() {
   return (
     <Provider store={store}>
       <div className="container">
-        <GlobalStyles />
+				<GlobalStyles />
+				<SortPopup />
         <Search />
         <Pagination />
         <CardsList />

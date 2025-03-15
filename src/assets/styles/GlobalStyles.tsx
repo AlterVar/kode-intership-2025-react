@@ -43,6 +43,11 @@ const GlobalStyles = createGlobalStyle`
 	body {
 		background-color: #fff;
 		color: #050510;
+		scrollbar-gutter: stable;
+
+		&:has(dialog) {
+			overflow: hidden;
+		}
 	}
 
 	.container {
@@ -52,7 +57,7 @@ const GlobalStyles = createGlobalStyle`
 		flex-direction: column; 
 		gap: 14px;
 
-		height: 100vh;
+		min-height: 100vh;
     box-sizing: border-box;
 	}
 
