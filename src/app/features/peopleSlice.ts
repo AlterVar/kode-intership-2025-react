@@ -9,12 +9,14 @@ export type loadingStatusType = {
   sorting: sortingType;
   search: string;
   people: PersonType[] | [];
+  peopleOnFilter: PersonType[] | [];
   filter: RequestParamsType;
 };
 
 const initialState: loadingStatusType = {
   state: "loading",
-  people: [],
+	people: [],
+	peopleOnFilter: [],
   sorting: sortingType.alphabetic,
   search: "",
   filter: {
@@ -46,7 +48,7 @@ export const peopleSlice = createSlice({
       /* peopleSlice.caseReducers.searchPeople(state); */
     },
     searchPeople: (state) => {
-      state.people = state.people.slice().filter((person) => {
+      state.people = state.peopleOnFilter.slice().filter((person) => {
         const name =
           person.firstName + " " + person.lastName + " " + person.userTag;
         return name.includes(state.search);
@@ -87,6 +89,7 @@ export const peopleSlice = createSlice({
     builder.addCase(fetchPeople.fulfilled, (state, action) => {
       state.state = "idle";
 			state.people = action.payload;
+			state.peopleOnFilter = action.payload;
 			peopleSlice.caseReducers.sortPeople(state, { type: "people/sortPeople", payload: state.sorting});
     });
     builder.addCase(fetchPeople.rejected, (state) => {
