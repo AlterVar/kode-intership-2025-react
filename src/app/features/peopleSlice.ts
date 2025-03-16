@@ -1,19 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { PersonType } from "../../types/PersonType";
 import axios from "axios";
-import RequestParamsType from "../../types/RequestParamsType";
+import { PersonType } from "../../types/PersonType";
 import { sortingType } from "../../types/SortingType";
+import RequestParamsType, { departments } from "../../types/RequestParamsType";
 
 export type loadingStatusType = {
   state: "idle" | "loading" | "failed";
   sorting: sortingType;
+  search: string;
   people: PersonType[] | [];
+  filter: RequestParamsType;
 };
 
 const initialState: loadingStatusType = {
   state: "loading",
-  sorting: sortingType.alphabetic,
   people: [],
+  sorting: sortingType.alphabetic,
+  search: "",
+  filter: {
+    __example: departments["Все"],
+  },
 };
 
 export const fetchPeople = createAsyncThunk<PersonType[], RequestParamsType>(
@@ -32,6 +38,20 @@ export const peopleSlice = createSlice({
   name: "people",
   initialState,
   reducers: {
+    setFilter: (state, action) => {
+      state.filter = { ...action.payload };
+    },
+    setSearchText: (state, action) => {
+      state.search = action.payload;
+      /* peopleSlice.caseReducers.searchPeople(state); */
+    },
+    searchPeople: (state) => {
+      state.people = state.people.slice().filter((person) => {
+        const name =
+          person.firstName + " " + person.lastName + " " + person.userTag;
+        return name.includes(state.search);
+      });
+    },
     changeSorting: (state, action) => {
 			state.sorting = action.payload;
 			peopleSlice.caseReducers.sortPeople(state, action)
@@ -76,5 +96,11 @@ export const peopleSlice = createSlice({
   },
 });
 
-export const { sortPeople, changeSorting } = peopleSlice.actions;
+export const {
+  sortPeople,
+  changeSorting,
+  setSearchText,
+  setFilter,
+  searchPeople,
+} = peopleSlice.actions;
 export default peopleSlice.reducer;

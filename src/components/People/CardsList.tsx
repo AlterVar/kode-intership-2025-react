@@ -9,7 +9,6 @@ import LoadingCard from "./Cards/LoadingCard";
 import LoadingError from "../Error/LoadingError";
 
 import type { PersonType } from "../../types/PersonType";
-import { departments } from "../../types/RequestParamsType";
 
 const Cards = styled.ul`
   display: flex;
@@ -25,7 +24,7 @@ const CardsList = (): JSX.Element => {
 	
 		useEffect(() => {
 			if (isNeedUpdate) {
-				dispatch(fetchPeople({ __example: departments["Все"] }))
+				dispatch(fetchPeople({ ...loadingStatus.filter }));
 				return () => {
 					// eslint-disable-next-line react-hooks/exhaustive-deps
 					isNeedUpdate = false;

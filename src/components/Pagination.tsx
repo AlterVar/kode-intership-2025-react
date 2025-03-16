@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { MouseEvent, RefObject, useRef, useState } from "react";
-import { useAppDispatch } from "../app/hooks";
-import { fetchPeople } from "../app/features/peopleSlice";
+import { MouseEvent } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { fetchPeople, setFilter, setSearchText } from "../app/features/peopleSlice";
 import { departments } from "../types/RequestParamsType";
+import { disabled } from "../app/features/searchSlice";
 
 const Container = styled.div`
   display: flex;
@@ -40,32 +41,32 @@ const Button = styled.button<{ $active?: boolean }>`
 type departmentsType = keyof typeof departments;
 
 const Pagination = () => {
+	const filterState = useAppSelector(state => state.people.filter);
 	const dispatch = useAppDispatch();
-  const activeDepartment: RefObject<departmentsType> = useRef(
-    Object.keys(departments)[0] as departmentsType
-  );
-  const [department, setDepartment] = useState(activeDepartment.current);
+	const departmentsValues = Object.entries(departments);
 
   const loadDepartment = (e: MouseEvent) => {
 		e.preventDefault();
 		const filterDepartment = e.currentTarget.innerHTML as departmentsType;
+		dispatch(setSearchText(""));
+		dispatch(disabled());
+		dispatch(setFilter({ __example: departments[filterDepartment] }));
 		dispatch(fetchPeople({ __example: departments[filterDepartment] }));
-    setDepartment(filterDepartment);
-  };
+	};
 
   return (
     <Container>
-      {Object.keys(departments).map((item, index) => {
-        if (item === department) {
+      {departmentsValues.map((item: [string, departments], index: number) => {
+        if (item[1] === filterState.__example) {
           return (
-            <Button key={index} $active>
-              {item}
+            <Button key={index} $active onClick={loadDepartment}>
+              {item[0]}
             </Button>
           );
         }
         return (
           <Button key={index} onClick={loadDepartment}>
-            {item}
+            {item[0]}
           </Button>
         );
       })}

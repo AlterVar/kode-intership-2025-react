@@ -4,6 +4,12 @@ import { TbListTree } from "react-icons/tb";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { openModal } from "../app/features/modalSlice";
 import { sortingType } from "../types/SortingType";
+import { KeyboardEvent } from "react";
+import { active, disabled } from "../app/features/searchSlice";
+import {
+  setSearchText,
+  searchPeople,
+} from "../app/features/peopleSlice";
 
 const H2 = styled.h2`
   font-family: "InterBold", sans-serif;
@@ -23,6 +29,7 @@ const SeachInput = styled.input`
 	font-size: 1.5rem;
 	line-height: 1.1;
   background-color: #f7f7f8;
+  caret-color: #6534ff;
   box-sizing: border-box;
   outline: none;
   border: none;
@@ -33,16 +40,16 @@ const SeachInput = styled.input`
   }
 `;
 
-const SearchIcon = styled.div`
+const SearchIcon = styled.div<{ $active?: boolean }>`
   position: absolute;
   top: 8px;
   left: 12px;
 
-	svg {
-		stroke: #c3c3c6;
-		width: 20px;
-		height: 20px;
-	}
+  svg {
+    stroke: ${(props) => (props.$active ? "#050510" : "#c3c3c6")};
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const SortIcon = styled.div<{ $birthdaySort?: boolean }>`
@@ -52,28 +59,58 @@ const SortIcon = styled.div<{ $birthdaySort?: boolean }>`
   cursor: pointer;
 
   svg {
-		stroke: ${(props) => (props.$birthdaySort ? "#6534ff" : "#c3c3c6")};
+    stroke: ${(props) => (props.$birthdaySort ? "#6534ff" : "#c3c3c6")};
     width: 24px;
     height: 24px;
   }
 `;
 
 const Search = () => {
-	const modalState = useAppSelector((state) => state.people.sorting);
-	const dispatch = useAppDispatch(); 
+  const modalState = useAppSelector((state) => state.people.sorting);
+  const searchState = useAppSelector((state) => state.search);
+  const peopleState = useAppSelector((state) => state.people);
 
-	const showModal = () => {
+  const dispatch = useAppDispatch();
+
+  const startSearch = (e: KeyboardEvent) => {
+		if (e.code === "Enter" || e.code === "NumpadEnter") e.target.blur();
+	};
+	
+	const blur = () => {
+		if (peopleState.search.length === 0) {
+			dispatch(disabled());
+		}
+		if (peopleState.search.length > 0) {
+			dispatch(searchPeople());
+    }
+	}
+
+  const showModal = () => {
     dispatch(openModal());
   };
 
-	return (
+  return (
     <div>
       <H2>Поиск</H2>
       <div style={{ position: "relative" }}>
-        <SearchIcon>
-          <FiSearch />
-        </SearchIcon>
-        <SeachInput type="text" placeholder="Введи имя, тег, почту..." />
+        {searchState.active ? (
+          <SearchIcon $active>
+            <FiSearch />
+          </SearchIcon>
+        ) : (
+          <SearchIcon>
+            <FiSearch />
+          </SearchIcon>
+        )}
+        <SeachInput
+          type="text"
+          placeholder="Введи имя, тег, почту..."
+          value={searchState.active ? peopleState.search : ""}
+          onChange={(e) => dispatch(setSearchText(e.target.value))}
+          onFocus={() => dispatch(active())}
+          onBlur={blur}
+          onKeyUp={startSearch}
+        />
         {modalState === sortingType.birthday ? (
           <SortIcon onClick={showModal} $birthdaySort>
             <TbListTree />
