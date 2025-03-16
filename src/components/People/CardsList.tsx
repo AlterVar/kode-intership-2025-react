@@ -9,6 +9,7 @@ import LoadingCard from "./Cards/LoadingCard";
 import LoadingError from "../Error/LoadingError";
 
 import type { PersonType } from "../../types/PersonType";
+import SearchError from "../Error/SearchError";
 
 const Cards = styled.ul`
   display: flex;
@@ -19,12 +20,14 @@ const CardsList = (): JSX.Element => {
   const loadingStatus: loadingStatusType = useAppSelector(
     (state) => state.people
 	);
+	const searchState = useAppSelector((state) => state.search)
 	const dispatch = useAppDispatch();
 		let isNeedUpdate = true;
 	
 		useEffect(() => {
 			if (isNeedUpdate) {
-				dispatch(fetchPeople({ ...loadingStatus.filter }));
+				/* dispatch(fetchPeople({ ...loadingStatus.filter })); */
+				dispatch(fetchPeople({ __code: "500" }));
 				return () => {
 					// eslint-disable-next-line react-hooks/exhaustive-deps
 					isNeedUpdate = false;
@@ -48,6 +51,7 @@ const CardsList = (): JSX.Element => {
   return (
     <main>
       {loadingStatus.state === "failed" && <LoadingError />}
+      {+searchState.active == 1 && loadingStatus.people.length === 0 && <SearchError />}
 
       <Cards>
         {loadingStatus.state === "loading" && (

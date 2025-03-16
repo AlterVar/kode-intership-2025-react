@@ -63,6 +63,7 @@ const GlobalStyles = createGlobalStyle`
 
 	main {
 		flex-grow: 1;
+		height: 1px;
 	}
 `;
 

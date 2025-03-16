@@ -5,34 +5,10 @@ import { departments } from "../../types/RequestParamsType";
 import { fetchPeople } from "../../app/features/peopleSlice";
 import { useAppDispatch } from "../../app/hooks";
 import { MouseEvent } from "react";
+import { Searching } from "./SearchError";
 
-const Loading = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-
-  height: 100%;
-
+export const Loading = styled(Searching)`
   .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-
-    .title {
-      font-family: "InterBold", sans-serif;
-      font-size: 1.7rem;
-      color: #050510;
-    }
-
-    .description {
-      font-family: "InterRegular", sans-serif;
-      font-size: 1.6rem;
-      color: #97979b;
-    }
-
     .try-again {
       font-family: "InterSemiBold", sans-serif;
       font-size: 1.6rem;
