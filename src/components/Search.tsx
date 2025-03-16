@@ -78,6 +78,10 @@ const Search = () => {
 	
 	const blur = () => {
 		if (peopleState.search.length === 0) {
+			if (peopleState.people.length === 0) {
+				dispatch(setSearchText(" "));
+				dispatch(searchPeople());
+			}
 			dispatch(disabled());
 		}
 		if (peopleState.search.length > 0) {
