@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { MouseEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchPeople, setFilter, setSearchText } from "../app/features/peopleSlice";
-import { departments } from "../types/RequestParamsType";
+import RequestParamsType, { departments } from "../types/RequestParamsType";
 import { disabled } from "../app/features/searchSlice";
 
 const Container = styled.div`
@@ -41,7 +41,7 @@ const Button = styled.button<{ $active?: boolean }>`
 type departmentsType = keyof typeof departments;
 
 const Pagination = () => {
-	const filterState = useAppSelector(state => state.people.filter);
+	const filterState: RequestParamsType = useAppSelector(state => state.people.filter);
 	const dispatch = useAppDispatch();
 	const departmentsValues = Object.entries(departments);
 

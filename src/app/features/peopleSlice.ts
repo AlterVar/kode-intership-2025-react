@@ -4,7 +4,7 @@ import { PersonType } from "../../types/PersonType";
 import { sortingType } from "../../types/SortingType";
 import RequestParamsType, { departments } from "../../types/RequestParamsType";
 
-export type loadingStatusType = {
+export type peopleStateType = {
   state: "idle" | "loading" | "failed";
   sorting: sortingType;
   search: string;
@@ -13,10 +13,10 @@ export type loadingStatusType = {
   filter: RequestParamsType;
 };
 
-const initialState: loadingStatusType = {
+const initialState: peopleStateType = {
   state: "loading",
-	people: [],
-	peopleOnFilter: [],
+  people: [],
+  peopleOnFilter: [],
   sorting: sortingType.alphabetic,
   search: "",
   filter: {

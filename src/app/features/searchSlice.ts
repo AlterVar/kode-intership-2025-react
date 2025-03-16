@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type stateType = {
+export type searchStateType = {
   active: boolean;
 };
 
-const initialState: stateType = {
+const initialState: searchStateType = {
   active: false,
 };
 

@@ -4,6 +4,7 @@ import { JSX } from "react";
 import type { PersonType } from "../../../types/PersonType";
 import { useAppSelector } from "../../../app/hooks";
 import { sortingType } from "../../../types/SortingType";
+import { peopleStateType } from "../../../app/features/peopleSlice";
 
 type propsType = {
   person: PersonType;
@@ -83,7 +84,7 @@ const Divider = styled.div`
 `;
 
 const IdleCard = ({ person, divider }: propsType): JSX.Element => {
-  const peopleState = useAppSelector((state) => state.people);
+  const peopleState: peopleStateType = useAppSelector((state) => state.people);
   const birthday = new Date(person.birthday);
 
   const getBirthday = () => {
