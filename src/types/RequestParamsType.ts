@@ -1,7 +1,7 @@
 export default interface RequestParamsType {
   __code?: "500";
   __dynamic?: boolean;
-  __example: departments;
+  __example?: departments;
 }
 
 export enum departments {
