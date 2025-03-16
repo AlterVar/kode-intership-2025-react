@@ -101,6 +101,13 @@ const IdleCard = ({ person, divider }: propsType): JSX.Element => {
 
   return (
     <>
+      {peopleState.sorting === sortingType.birthday && divider && (
+        <Divider>
+          <hr />
+          <p>{getYear()}</p>
+          <hr />
+        </Divider>
+      )}
       <Card>
         <div className="image-container">
           <img src={person.avatarUrl} alt="avatar" />
@@ -116,13 +123,13 @@ const IdleCard = ({ person, divider }: propsType): JSX.Element => {
           <Birthday>{getBirthday()}</Birthday>
         )}
       </Card>
-      {peopleState.sorting === sortingType.birthday && divider && (
+      {/* {peopleState.sorting === sortingType.birthday && divider && (
         <Divider>
           <hr />
           <p>{getYear()}</p>
           <hr />
         </Divider>
-      )}
+      )} */}
     </>
   );
 };

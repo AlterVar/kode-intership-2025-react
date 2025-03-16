@@ -42,12 +42,13 @@ const CardsList = (): JSX.Element => {
     index: number,
     array: PersonType[]
   ) => {
-    if (array.length - 1 !== index) {
+    if (index !== 0) {
       const current = new Date(person.birthday).getFullYear();
-      const next = new Date(array[index + 1].birthday).getFullYear();
+      const prev = new Date(array[index - 1].birthday).getFullYear();
 
-      return current === next;
-    }
+      return current === prev;
+		}
+		return true;
   };
 
   return (
