@@ -3,6 +3,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa6";
 import { LuPhone } from "react-icons/lu";
 import styled from "styled-components";
+import { Link, useParams } from "react-router";
+import { useAppSelector } from "../app/hooks";
 
 const Header = styled.header`
   padding: 24px 20px;
@@ -106,20 +108,65 @@ const Age = styled.p`
 `;
 
 const PersonPage = (): JSX.Element => {
+	const params = useParams();
+	const id = params.id;
+	const peopleState = useAppSelector((state) => state.people);
+	const person = peopleState.people.filter(person => person.id === id)[0];
+	const birthday = new Date(person.birthday);
+
+	const getFormattedAge = () => {
+		const today = new Date();
+		let age = today.getFullYear() - birthday.getFullYear();
+		let result = age.toString();
+
+		if (
+      today.getMonth() < birthday.getMonth() ||
+      (today.getMonth() === birthday.getMonth() &&
+        today.getDate() < birthday.getDate())
+    ) {
+      age--;
+		}
+		
+		if (age % 10 === 1) {
+			result = age + " год";
+		} else if (age % 10 < 5) {
+			result = age + " года";
+		} else {
+			result = age + " лет";
+		}
+			
+			return result;
+	}
+
+	const formatBirthday = () => {
+		return birthday.toLocaleString("ru-RU", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		}).slice(0, -2);
+	}
+
+	const formatPhone = () => {
+		const phone = person.phone;
+		//+7 (900) 900 90 09
+		return phone.slice(0, 2) + " (" + phone.slice(2, 5) + ") " + phone.slice(5, 8) + " " + phone.slice(8, 10) + " " + phone.slice(10);
+	}
+
   return (
     <section>
       <Header>
-        <a href="#">
+        <Link to="/">
           <IoIosArrowBack />
-        </a>
+        </Link>
         <div className="image-container">
-          <img src="" alt="avatar" />
+          <img src={person.avatarUrl} alt="avatar" />
         </div>
         <div className="content">
           <h2 className="person-name">
-            Алиса Иванова<span> al</span>
+            {person.firstName + " " + person.lastName}
+            <span>{" " + person.userTag}</span>
           </h2>
-          <p>profession</p>
+          <p>{person.department}</p>
         </div>
       </Header>
       <Main>
@@ -127,15 +174,15 @@ const PersonPage = (): JSX.Element => {
           <div>
             <FaRegStar />
           </div>
-          <p className="description">birthday</p>
-          <Age>age</Age>
+          <p className="description">{formatBirthday()}</p>
+          <Age>{getFormattedAge()}</Age>
         </Info>
         <Info>
           <div>
             <LuPhone />
           </div>
-          <a href="tel:79999009090" className="description">
-            +7 (999) 900 90 90
+          <a href={"tel:" + person.phone} className="description">
+            {formatPhone()}
           </a>
         </Info>
       </Main>

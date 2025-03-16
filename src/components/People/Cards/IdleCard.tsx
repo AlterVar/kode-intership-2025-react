@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { JSX } from "react";
+import { Link } from "react-router";
 
 import type { PersonType } from "../../../types/PersonType";
 import { useAppSelector } from "../../../app/hooks";
@@ -12,47 +13,53 @@ type propsType = {
 };
 
 const Card = styled.li`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  padding: 6px 0;
-
-  cursor: pointer;
-
-  .image-container {
+  list-style: none;
+  a {
+    text-decoration: none;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 6px 0;
 
-    width: 72px;
-    height: 72px;
+    cursor: pointer;
 
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-  }
+    .image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  .content {
-    h3 {
-      font-family: "InterMedium", sans-serif;
-      font-size: 1.6rem;
-      color: #050510;
+      width: 72px;
+      height: 72px;
 
-      margin-bottom: 6px;
-
-      span {
-        font-size: 1.4rem;
-        color: #97979b;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        text-decoration: none;
+        color: #050510;
       }
     }
 
-    p {
-      font-family: "InterRegular", sans-serif;
-      font-size: 1.3rem;
-      color: #55555c;
+    .content {
+      h3 {
+        font-family: "InterMedium", sans-serif;
+        font-size: 1.6rem;
+        color: #050510;
+
+        margin-bottom: 6px;
+
+        span {
+          font-size: 1.4rem;
+          color: #97979b;
+        }
+      }
+
+      p {
+        font-family: "InterRegular", sans-serif;
+        font-size: 1.3rem;
+        color: #55555c;
+      }
     }
   }
 `;
@@ -71,7 +78,7 @@ const Divider = styled.div`
   align-items: center;
 
   hr {
-		width: 100%;
+    width: 100%;
     margin: 24px;
     border-top: 1px solid #c3c3c6;
     border-radius: 1px;
@@ -109,19 +116,21 @@ const IdleCard = ({ person, divider }: propsType): JSX.Element => {
         </Divider>
       )}
       <Card>
-        <div className="image-container">
-          <img src={person.avatarUrl} alt="avatar" />
-        </div>
-        <div className="content">
-          <h3>
-            {person.firstName + " " + person.lastName}
-            <span>{" " + person.userTag}</span>
-          </h3>
-          <p>{person.position}</p>
-        </div>
-        {peopleState.sorting === sortingType.birthday && (
-          <Birthday>{getBirthday()}</Birthday>
-        )}
+        <Link to={person.id}>
+          <div className="image-container">
+            <img src={person.avatarUrl} alt="avatar" />
+          </div>
+          <div className="content">
+            <h3>
+              {person.firstName + " " + person.lastName}
+              <span>{" " + person.userTag}</span>
+            </h3>
+            <p>{person.position}</p>
+          </div>
+          {peopleState.sorting === sortingType.birthday && (
+            <Birthday>{getBirthday()}</Birthday>
+          )}
+        </Link>
       </Card>
       {/* {peopleState.sorting === sortingType.birthday && divider && (
         <Divider>
