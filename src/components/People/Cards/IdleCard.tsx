@@ -102,8 +102,8 @@ const IdleCard = ({ person, divider }: propsType): JSX.Element => {
     return day + " " + month;
   };
 
-  const getYear = () => {
-    return birthday.getFullYear();
+	const getYear = () => {
+		return new Date().getFullYear() + 1;
   };
 
   return (
@@ -132,13 +132,6 @@ const IdleCard = ({ person, divider }: propsType): JSX.Element => {
           )}
         </Link>
       </Card>
-      {/* {peopleState.sorting === sortingType.birthday && divider && (
-        <Divider>
-          <hr />
-          <p>{getYear()}</p>
-          <hr />
-        </Divider>
-      )} */}
     </>
   );
 };

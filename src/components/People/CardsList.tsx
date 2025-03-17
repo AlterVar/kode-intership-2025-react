@@ -23,11 +23,12 @@ const CardsList = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
   let isNeedUpdate = true;
+  let dividerIsRendered = false;
 
   useEffect(() => {
     if (isNeedUpdate) {
-			dispatch(fetchPeople({ ...peopleState.filter }));
-			
+      dispatch(fetchPeople({ ...peopleState.filter }));
+
       //*Uncomment to see the error screen on reload
       //*dispatch(fetchPeople({ __code: "500" }));
       return () => {
@@ -37,18 +38,16 @@ const CardsList = (): JSX.Element => {
     }
   }, []);
 
-  const checkYear = (
-    person: PersonType,
-    index: number,
-    array: PersonType[]
-  ) => {
-    if (index !== 0) {
-      const current = new Date(person.birthday).getFullYear();
-      const prev = new Date(array[index - 1].birthday).getFullYear();
+  const checkYear = (person: PersonType) => {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentDate = new Date(person.birthday);
+    currentDate.setFullYear(currentYear);
 
-      return current === prev;
+		if (currentDate < today) {
+			currentDate.setFullYear(currentYear + 1);
 		}
-		return true;
+    return currentDate.getFullYear() === currentYear;
   };
 
   return (
@@ -74,18 +73,12 @@ const CardsList = (): JSX.Element => {
 
         {peopleState.state === "idle" &&
           peopleState.people.length > 0 &&
-          peopleState.people.map((person: PersonType, index, array) => {
-            if (checkYear(person, index, array)) {
-              return (
-                <IdleCard key={person.id} person={person} divider={false} />
-              );
-            } else {
-              return (
-                <div key={person.id}>
-                  <IdleCard person={person} divider={true} />
-                </div>
-              );
+          peopleState.people.map((person: PersonType) => {
+						if (!checkYear(person) && !dividerIsRendered) {
+							dividerIsRendered = true;
+							return <IdleCard key={person.id} person={person} divider={true} />;
             }
+            return <IdleCard key={person.id} person={person} divider={false} />;
           })}
       </Cards>
     </main>

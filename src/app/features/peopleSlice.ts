@@ -55,8 +55,8 @@ export const peopleSlice = createSlice({
       });
     },
     changeSorting: (state, action) => {
-			state.sorting = action.payload;
-			peopleSlice.caseReducers.sortPeople(state, action)
+      state.sorting = action.payload;
+      peopleSlice.caseReducers.sortPeople(state, action);
     },
     sortPeople: (state, action) => {
       if (action.payload === sortingType.alphabetic) {
@@ -72,11 +72,20 @@ export const peopleSlice = createSlice({
           return 0;
         });
       }
-      if (action.payload === sortingType.birthday) {
-        state.people = state.people.slice().sort((a, b) => {
-          const first = Date.parse(a.birthday);
-          const second = Date.parse(b.birthday);
-          return second - first;
+			if (action.payload === sortingType.birthday) {
+				const today = new Date();
+				const currentYear = today.getFullYear();
+				
+				state.people = state.people.slice().sort((a, b) => {
+					const firstDate = new Date(a.birthday)
+						firstDate.setFullYear(currentYear);
+					const secondDate = new Date(b.birthday)
+						secondDate.setFullYear(currentYear);
+					
+					if (firstDate < today) firstDate.setFullYear(currentYear + 1);
+					if (secondDate < today) secondDate.setFullYear(currentYear + 1);
+
+					return firstDate.getTime() - secondDate.getTime();
         });
       }
     },
@@ -88,9 +97,12 @@ export const peopleSlice = createSlice({
     });
     builder.addCase(fetchPeople.fulfilled, (state, action) => {
       state.state = "idle";
-			state.people = action.payload;
-			state.peopleOnFilter = action.payload;
-			peopleSlice.caseReducers.sortPeople(state, { type: "people/sortPeople", payload: state.sorting});
+      state.people = action.payload;
+      state.peopleOnFilter = action.payload;
+      peopleSlice.caseReducers.sortPeople(state, {
+        type: "people/sortPeople",
+        payload: state.sorting,
+      });
     });
     builder.addCase(fetchPeople.rejected, (state) => {
       state.state = "failed";
