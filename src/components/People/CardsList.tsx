@@ -46,7 +46,7 @@ const CardsList = (): JSX.Element => {
     return (
       <main>
         <ul>
-          {Array.from([8], (_, index) => (
+					{Array.from({ length: 8 }, (_, index) => (
             <Card key={index} type="loading" />
           ))}
         </ul>
