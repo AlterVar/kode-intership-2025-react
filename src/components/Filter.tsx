@@ -1,9 +1,16 @@
 import styled from "styled-components";
 import { MouseEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { fetchPeople, setFilter, setSearchText } from "../app/features/peopleSlice";
-import RequestParamsType, { departments } from "../types/RequestParamsType";
+import {
+  fetchPeople,
+  setFilter,
+  setSearchText,
+} from "../app/features/peopleSlice";
 import { disabled } from "../app/features/searchSlice";
+
+import RequestParamsType, { FilterType } from "../types/requestParamsType";
+
+type departmentsType = keyof typeof FilterType;
 
 const Container = styled.div`
   display: flex;
@@ -38,25 +45,35 @@ const Button = styled.button<{ $active?: boolean }>`
   color: ${(props) => (props.$active ? "#050510" : "#97979b")};
 `;
 
-type departmentsType = keyof typeof departments;
-
-const Pagination = () => {
-	const filterState: RequestParamsType = useAppSelector(state => state.people.filter);
-	const dispatch = useAppDispatch();
-	const departmentsValues = Object.entries(departments);
+const Filter = () => {
+  const filterState: RequestParamsType = useAppSelector(
+    (state) => state.people.filter
+  );
+  const dispatch = useAppDispatch();
+  const departmentsValues = Object.entries(FilterType);
 
   const loadDepartment = (e: MouseEvent) => {
-		e.preventDefault();
-		const filterDepartment = e.currentTarget.innerHTML as departmentsType;
-		dispatch(setSearchText(""));
-		dispatch(disabled());
-		dispatch(setFilter({ __example: departments[filterDepartment] }));
-		dispatch(fetchPeople({ __example: departments[filterDepartment] }));
-	};
+    e.preventDefault();
+    const filterDepartment = e.currentTarget.innerHTML;
+    if (filterDepartment in FilterType) {
+      dispatch(setSearchText(""));
+      dispatch(disabled());
+      dispatch(
+        setFilter({
+          __example: FilterType[filterDepartment as departmentsType],
+        })
+      );
+      dispatch(
+        fetchPeople({
+          __example: FilterType[filterDepartment as departmentsType],
+        })
+      );
+    }
+  };
 
   return (
     <Container>
-      {departmentsValues.map((item: [string, departments], index: number) => {
+      {departmentsValues.map((item: [string, FilterType], index: number) => {
         if (item[1] === filterState.__example) {
           return (
             <Button key={index} $active onClick={loadDepartment}>
@@ -74,4 +91,4 @@ const Pagination = () => {
   );
 };
 
-export default Pagination;
+export default Filter;

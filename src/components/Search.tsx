@@ -1,22 +1,27 @@
+import { JSX, KeyboardEvent, RefObject, useRef } from "react";
 import styled from "styled-components";
-import { FiSearch } from "react-icons/fi";
-import { TbListTree } from "react-icons/tb";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { openModal } from "../app/features/modalSlice";
-import { sortingType } from "../types/SortingType";
-import { KeyboardEvent } from "react";
 import { active, disabled } from "../app/features/searchSlice";
-import {
-  setSearchText,
-  searchPeople,
-} from "../app/features/peopleSlice";
+import { setSearchText, searchPeople } from "../app/features/peopleSlice";
 
-const H2 = styled.h2`
-  font-family: "InterBold", sans-serif;
-  font-size: 2.4rem;
-  color: #050510;
-  margin-bottom: 18px;
-	margin-left: 8px;
+import { FiSearch } from "react-icons/fi";
+import { TbListTree } from "react-icons/tb";
+
+import { SortingType } from "../types/sortingType";
+
+const Container = styled.div`
+  .title {
+    font-family: "InterBold", sans-serif;
+    font-size: 2.4rem;
+    color: #050510;
+    margin-bottom: 18px;
+    margin-left: 8px;
+  }
+
+  .input-container {
+    position: relative;
+  }
 `;
 
 const SeachInput = styled.input`
@@ -24,10 +29,10 @@ const SeachInput = styled.input`
   padding: 12px;
   padding-left: 45px;
   border-radius: 16px;
-	font-family: "InterRegular", sans-serif;
-	color: #050510;
-	font-size: 1.5rem;
-	line-height: 1.1;
+  font-family: "InterRegular", sans-serif;
+  color: #050510;
+  font-size: 1.5rem;
+  line-height: 1.1;
   background-color: #f7f7f8;
   caret-color: #6534ff;
   box-sizing: border-box;
@@ -36,7 +41,7 @@ const SeachInput = styled.input`
 
   &::placeholder {
     color: #c3c3c6;
-		font-family: "InterMedium", sans-serif;
+    font-family: "InterMedium", sans-serif;
   }
 `;
 
@@ -65,38 +70,44 @@ const SortIcon = styled.div<{ $birthdaySort?: boolean }>`
   }
 `;
 
-const Search = () => {
+const Search = (): JSX.Element => {
   const modalState = useAppSelector((state) => state.people.sorting);
   const searchState = useAppSelector((state) => state.search);
   const peopleState = useAppSelector((state) => state.people);
 
+  const input: RefObject<HTMLInputElement | null> = useRef(null);
+
   const dispatch = useAppDispatch();
 
   const startSearch = (e: KeyboardEvent) => {
-		if (e.code === "Enter" || e.code === "NumpadEnter") e.target.blur();
-	};
-	
-	const blur = () => {
-		if (peopleState.search.length === 0) {
-			if (peopleState.people.length === 0) {
-				dispatch(setSearchText(" "));
-				dispatch(searchPeople());
-			}
-			dispatch(disabled());
-		}
-		if (peopleState.search.length > 0) {
+    if (
+      (e.code === "Enter" || e.code === "NumpadEnter") &&
+      input.current !== null
+    )
+      input.current.blur();
+  };
+
+  const blur = () => {
+    if (peopleState.search.length === 0 && peopleState.people.length === 0) {
+      dispatch(setSearchText(" "));
 			dispatch(searchPeople());
+			dispatch(setSearchText(""));
     }
-	}
+    if (peopleState.search.length > 0) {
+      dispatch(searchPeople());
+      return;
+    }
+    dispatch(disabled());
+  };
 
   const showModal = () => {
     dispatch(openModal());
   };
 
   return (
-    <div>
-      <H2>Поиск</H2>
-      <div style={{ position: "relative" }}>
+    <Container>
+      <h2 className="title">Поиск</h2>
+      <div className="input-container">
         {searchState.active ? (
           <SearchIcon $active>
             <FiSearch />
@@ -110,12 +121,13 @@ const Search = () => {
           type="text"
           placeholder="Введи имя, тег, почту..."
           value={searchState.active ? peopleState.search : ""}
+          ref={input}
           onChange={(e) => dispatch(setSearchText(e.target.value))}
           onFocus={() => dispatch(active())}
           onBlur={blur}
           onKeyUp={startSearch}
         />
-        {modalState === sortingType.birthday ? (
+        {modalState === SortingType.birthday ? (
           <SortIcon onClick={showModal} $birthdaySort>
             <TbListTree />
           </SortIcon>
@@ -125,7 +137,7 @@ const Search = () => {
           </SortIcon>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 

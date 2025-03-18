@@ -1,25 +1,26 @@
 import { MouseEvent, RefObject, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+
 import styled from "styled-components";
-
 import { IoClose } from "react-icons/io5";
+
 import { closeModal } from "../../app/features/modalSlice";
-import { changeSorting } from "../../app/features/peopleSlice"; 
+import { sortPeople } from "../../app/features/peopleSlice";
 
-import { sortingType } from "../../types/SortingType";
+import { SortingType } from "../../types/sortingType";
 
-const Container = styled.dialog`
+const Dialog = styled.dialog`
   width: 373px;
   padding: 20px 23px 8px 17px;
   box-sizing: border-box;
   background-color: #fff;
+  border: none;
   border-radius: 20px;
+
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: none;
-  z-index: 15;
 
   &::backdrop {
     background-color: rgba(5, 5, 16, 0.16);
@@ -37,7 +38,7 @@ const Header = styled.div`
   display: flex;
   justify-content: end;
 
-  h2 {
+  .title {
     font-family: "InterSemiBold", sans-serif;
     font-size: 2rem;
     color: #050510;
@@ -46,7 +47,11 @@ const Header = styled.div`
   }
 
   button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+
     background-color: #f7f7f8;
     width: 24px;
     height: 24px;
@@ -54,10 +59,6 @@ const Header = styled.div`
     border: none;
     outline: none;
     border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     cursor: pointer;
 
@@ -69,7 +70,7 @@ const Header = styled.div`
   }
 `;
 
-const InputContainer = styled.label`
+const RadioInput = styled.label`
   padding: 19px 0;
   display: flex;
   align-items: center;
@@ -88,20 +89,20 @@ const InputContainer = styled.label`
       border-width: 8px;
     }
   }
-`;
 
-const CustomRadio = styled.span`
-  display: inline-block;
-  width: 23px;
-  height: 23px;
-  border-radius: 50%;
-  border: 3px solid #6534ff;
-  box-sizing: border-box;
+  span {
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    border: 3px solid #6534ff;
+    box-sizing: border-box;
+  }
 `;
 
 const SortModal = () => {
   const dialog: RefObject<HTMLDialogElement | null> = useRef(null);
-  const chosenRadio: RefObject<EventTarget | null> = useRef(null);
+  const peopleState = useAppSelector((state) => state.people);
   const modalState = useAppSelector((state) => state.modal);
   const dispatch = useAppDispatch();
 
@@ -126,49 +127,49 @@ const SortModal = () => {
   };
 
   const chooseSort = (e: MouseEvent) => {
-    if (chosenRadio.current !== e.target) {
-      chosenRadio.current = e.target;
-      const value = e.currentTarget.getAttribute("value");
-      dispatch(changeSorting(value));
-		}
-		dispatch(closeModal());
+    const value = e.currentTarget.getAttribute("value");
+    if (peopleState.sorting !== value) {
+      dispatch(sortPeople(value));
+    }
+    dispatch(closeModal());
   };
 
   return (
     <div className={modalState.isOpen ? "modalOpen" : "modalClose"}>
-      <Container ref={dialog} onClick={hideModalUsingBackdrop}>
+      <Dialog ref={dialog} onClick={hideModalUsingBackdrop}>
         <Content>
           <Header>
-            <h2>Сортировка</h2>
+            <h2 className="title">Сортировка</h2>
             <button onClick={hideModal}>
               <IoClose />
             </button>
           </Header>
           <div>
-            <InputContainer>
+            <RadioInput>
               <input
                 type="radio"
-                name="people"
-                value={sortingType.alphabetic}
+                name="sort"
+                value={SortingType.alphabetic}
                 onClick={chooseSort}
-                defaultChecked
+                defaultChecked={peopleState.sorting === SortingType.alphabetic}
               />
-              <CustomRadio />
+              <span />
               По алфавиту
-            </InputContainer>
-            <InputContainer>
+            </RadioInput>
+            <RadioInput>
               <input
                 type="radio"
-                name="people"
-                value={sortingType.birthday}
+                name="sort"
+                value={SortingType.birthday}
                 onClick={chooseSort}
+                defaultChecked={peopleState.sorting === SortingType.birthday}
               />
-              <CustomRadio />
+              <span />
               По дню рождения
-            </InputContainer>
+            </RadioInput>
           </div>
         </Content>
-      </Container>
+      </Dialog>
     </div>
   );
 };

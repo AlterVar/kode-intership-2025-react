@@ -1,26 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { PersonType } from "../../types/PersonType";
-import { sortingType } from "../../types/SortingType";
-import RequestParamsType, { departments } from "../../types/RequestParamsType";
 
-export type peopleStateType = {
-  state: "idle" | "loading" | "failed";
-  sorting: sortingType;
+import { PersonType } from "../../types/personType";
+import RequestParamsType, { FilterType } from "../../types/requestParamsType";
+import { SortingType } from "../../types/sortingType";
+
+export type loadingState = "idle" | "loading" | "failed";
+export type PeopleStateType = {
+  state: loadingState;
+  sorting: SortingType;
   search: string;
   people: PersonType[] | [];
   peopleOnFilter: PersonType[] | [];
   filter: RequestParamsType;
 };
 
-const initialState: peopleStateType = {
+const initialState: PeopleStateType = {
   state: "loading",
   people: [],
   peopleOnFilter: [],
-  sorting: sortingType.alphabetic,
+  sorting: SortingType.alphabetic,
   search: "",
   filter: {
-    __example: departments["Все"],
+    __example: FilterType["Все"],
   },
 };
 
@@ -36,61 +38,60 @@ export const fetchPeople = createAsyncThunk<PersonType[], RequestParamsType>(
   }
 );
 
+const sort = (state: PeopleStateType, action: {payload: string, type: string}) => {
+	if (action.payload === SortingType.alphabetic) {
+    state.people = state.people.slice().sort((a, b) => {
+      const first = a.firstName + " " + a.lastName;
+      const second = b.firstName + " " + b.lastName;
+      if (first > second) {
+        return 1;
+      }
+      if (first < second) {
+        return -1;
+      }
+      return 0;
+    });
+  }
+  if (action.payload === SortingType.birthday) {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+
+    state.people = state.people.slice().sort((a, b) => {
+      const firstDate = new Date(a.birthday);
+      firstDate.setFullYear(currentYear);
+      const secondDate = new Date(b.birthday);
+      secondDate.setFullYear(currentYear);
+
+      if (firstDate < today) firstDate.setFullYear(currentYear + 1);
+      if (secondDate < today) secondDate.setFullYear(currentYear + 1);
+
+      return firstDate.getTime() - secondDate.getTime();
+    });
+  }
+}
+
 export const peopleSlice = createSlice({
   name: "people",
   initialState,
-  reducers: {
-    setFilter: (state, action) => {
-      state.filter = { ...action.payload };
-    },
-    setSearchText: (state, action) => {
-      state.search = action.payload;
-      /* peopleSlice.caseReducers.searchPeople(state); */
-    },
-    searchPeople: (state) => {
-      state.people = state.peopleOnFilter.slice().filter((person) => {
-        const name =
-          person.firstName + " " + person.lastName + " " + person.userTag;
-        return name.includes(state.search);
-      });
-    },
-    changeSorting: (state, action) => {
-      state.sorting = action.payload;
-      peopleSlice.caseReducers.sortPeople(state, action);
-    },
-    sortPeople: (state, action) => {
-      if (action.payload === sortingType.alphabetic) {
-        state.people = state.people.slice().sort((a, b) => {
-          const first = a.firstName + " " + a.lastName;
-          const second = b.firstName + " " + b.lastName;
-          if (first > second) {
-            return 1;
-          }
-          if (first < second) {
-            return -1;
-          }
-          return 0;
-        });
-      }
-			if (action.payload === sortingType.birthday) {
-				const today = new Date();
-				const currentYear = today.getFullYear();
-				
-				state.people = state.people.slice().sort((a, b) => {
-					const firstDate = new Date(a.birthday)
-						firstDate.setFullYear(currentYear);
-					const secondDate = new Date(b.birthday)
-						secondDate.setFullYear(currentYear);
-					
-					if (firstDate < today) firstDate.setFullYear(currentYear + 1);
-					if (secondDate < today) secondDate.setFullYear(currentYear + 1);
-
-					return firstDate.getTime() - secondDate.getTime();
-        });
-      }
-    },
-  },
-
+	reducers: {
+		setFilter: (state, action) => {
+			state.filter = { ...action.payload };
+		},
+		setSearchText: (state, action) => {
+			state.search = action.payload;
+		},
+		searchPeople: (state) => {
+			state.people = state.peopleOnFilter.filter((person) => {
+				const name =
+					person.firstName + " " + person.lastName + " " + person.userTag;
+				return name.includes(state.search);
+			});
+		},
+		sortPeople: (state, action) => {
+			state.sorting = action.payload;
+			sort(state, action);
+		},
+	},
   extraReducers: (builder) => {
     builder.addCase(fetchPeople.pending, (state) => {
       state.state = "loading";
@@ -99,7 +100,7 @@ export const peopleSlice = createSlice({
       state.state = "idle";
       state.people = action.payload;
       state.peopleOnFilter = action.payload;
-      peopleSlice.caseReducers.sortPeople(state, {
+      sort(state, {
         type: "people/sortPeople",
         payload: state.sorting,
       });
@@ -113,7 +114,6 @@ export const peopleSlice = createSlice({
 
 export const {
   sortPeople,
-  changeSorting,
   setSearchText,
   setFilter,
   searchPeople,

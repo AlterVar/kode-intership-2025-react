@@ -1,12 +1,23 @@
 import { JSX, useEffect } from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { FaRegStar } from "react-icons/fa6";
-import { LuPhone } from "react-icons/lu";
 import styled from "styled-components";
 import { Link, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchPeople } from "../app/features/peopleSlice";
-import { departments } from "../types/RequestParamsType";
+
+import { IoIosArrowBack } from "react-icons/io";
+import { FaRegStar } from "react-icons/fa6";
+import { LuPhone } from "react-icons/lu";
+
+import { FilterType } from "../types/requestParamsType";
+
+import ErrorScreen from "../components/errors/ErrorScreen";
+
+const Container = styled.section`
+  min-height: 100vh;
+  max-width: 1280px;
+  margin: 0 auto;
+  box-shadow: 0 0 50px 10px #f5f5f6;
+`;
 
 const Header = styled.header`
   padding: 24px 20px;
@@ -109,29 +120,16 @@ const Age = styled.p`
   color: #97979b;
 `;
 
-const Loading = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-	height: 100vh;
-
-  p {
-    font-family: "InterBold", sans-serif;
-    font-size: 2.6rem;
-		color: #6534ff;
-  }
-`;
-
-const PersonPage = (): JSX.Element => {
+const PersonPage = (): JSX.Element | null => {
   const params = useParams();
   const id = params.id;
   const peopleState = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-		if (peopleState.people.length === 0) {
-			/* dispatch(fetchPeople({ __code: "500"})); */
-      dispatch(fetchPeople({ __example: departments["Все"] }));
+    if (peopleState.people.length === 0) {
+      /* dispatch(fetchPeople({ __code: "500" })); */
+      dispatch(fetchPeople({ __example: FilterType["Все"] }));
     }
   }, [dispatch, peopleState.people.length]);
 
@@ -190,7 +188,7 @@ const PersonPage = (): JSX.Element => {
     };
 
     return (
-      <section>
+      <Container>
         <Header>
           <Link to="/">
             <IoIosArrowBack />
@@ -223,10 +221,18 @@ const PersonPage = (): JSX.Element => {
             </a>
           </Info>
         </Main>
-      </section>
+      </Container>
     );
-	}
-	return <Loading><p>Loading...</p></Loading>;
+  }
+
+  if (peopleState.state === "failed")
+    return (
+      <div className="container">
+        <ErrorScreen type="person" />
+      </div>
+    );
+
+  return null;
 };
 
 export default PersonPage;

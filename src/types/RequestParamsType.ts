@@ -1,10 +1,10 @@
 export default interface RequestParamsType {
   __code?: "500";
   __dynamic?: boolean;
-  __example?: departments;
+  __example?: FilterType;
 }
 
-export enum departments {
+export enum FilterType {
   "Все" = "all",
   "Android" = "android",
   "iOS" = "ios",
@@ -19,3 +19,17 @@ export enum departments {
   "Техподдержка" = "support",
   "Аналитика" = "analytics",
 }
+
+export type Departments =
+  | "android"
+  | "ios"
+  | "design"
+  | "management"
+  | "qa"
+  | "back_office"
+  | "frontend"
+  | "hr"
+  | "pr"
+  | "backend"
+  | "support"
+  | "analytics";

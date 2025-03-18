@@ -35,6 +35,10 @@ const GlobalStyles = createGlobalStyle`
 		padding: 0;
 	}
 
+	:root {
+		scrollbar-gutter: stable;
+	}
+
 	html {
 		font-family: "InterRegular", sans-serif;
 		font-size: 62.5%;
@@ -43,7 +47,6 @@ const GlobalStyles = createGlobalStyle`
 	body {
 		background-color: #fff;
 		color: #050510;
-		scrollbar-gutter: stable;
 
 		&:has(.modalOpen) {
 			overflow: hidden;
@@ -52,18 +55,22 @@ const GlobalStyles = createGlobalStyle`
 
 	.container {
 		min-width: 320px;
-  	padding: 16px;
+		max-width: 1280px;
+		margin: 0 auto;
+		padding: 16px;
+		box-shadow: 0 0 50px 10px #f5f5f6;
+    box-sizing: border-box;
+  	
 		display: flex; 
 		flex-direction: column; 
 		gap: 14px;
 
 		min-height: 100vh;
-    box-sizing: border-box;
+		
 	}
 
 	main {
 		flex-grow: 1;
-		height: 1px;
 	}
 `;
 
