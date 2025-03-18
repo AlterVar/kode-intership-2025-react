@@ -103,7 +103,10 @@ export const peopleSlice = createSlice({
       sort(state, {
         type: "people/sortPeople",
         payload: state.sorting,
-      });
+			});
+			if (state.search.length > 0) {
+				peopleSlice.caseReducers.searchPeople(state);
+			}
     });
     builder.addCase(fetchPeople.rejected, (state) => {
       state.state = "failed";
