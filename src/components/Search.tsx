@@ -1,4 +1,4 @@
-import { JSX, KeyboardEvent, RefObject, useRef } from "react";
+import { FormEvent, JSX } from "react";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { openModal } from "../app/features/modalSlice";
@@ -75,23 +75,14 @@ const Search = (): JSX.Element => {
   const searchState = useAppSelector((state) => state.search);
   const peopleState = useAppSelector((state) => state.people);
 
-  const input: RefObject<HTMLInputElement | null> = useRef(null);
-
   const dispatch = useAppDispatch();
 
-  const startSearch = (e: KeyboardEvent) => {
-    if (
-      (e.code === "Enter" || e.code === "NumpadEnter") &&
-      input.current !== null
-    )
-      input.current.blur();
-  };
-
-  const blur = () => {
+	const blur = (e: FocusEvent | FormEvent) => {
+		e.preventDefault();
     if (peopleState.search.length === 0 && peopleState.people.length === 0) {
       dispatch(setSearchText(" "));
-			dispatch(searchPeople());
-			dispatch(setSearchText(""));
+      dispatch(searchPeople());
+      dispatch(setSearchText(""));
     }
     if (peopleState.search.length > 0) {
       dispatch(searchPeople());
@@ -117,16 +108,16 @@ const Search = (): JSX.Element => {
             <FiSearch />
           </SearchIcon>
         )}
-        <SeachInput
-          type="text"
-          placeholder="Введи имя, тег, почту..."
-          value={searchState.active ? peopleState.search : ""}
-          ref={input}
-          onChange={(e) => dispatch(setSearchText(e.target.value))}
-          onFocus={() => dispatch(active())}
-          onBlur={blur}
-          onKeyUp={startSearch}
-        />
+        <form onSubmit={blur}>
+          <SeachInput
+            type="text"
+            placeholder="Введи имя, тег, почту..."
+            value={searchState.active ? peopleState.search : ""}
+            onChange={(e) => dispatch(setSearchText(e.target.value))}
+            onFocus={() => dispatch(active())}
+            onBlur={blur}
+          />
+        </form>
         {modalState === SortingType.birthday ? (
           <SortIcon onClick={showModal} $birthdaySort>
             <TbListTree />
