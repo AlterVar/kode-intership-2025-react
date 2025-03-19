@@ -8,10 +8,12 @@ import Index from "./pages/Index";
 import PersonPage from "./pages/Person";
 
 function App() {
+	const basename = import.meta.env.BASE_URL;
+
   return (
     <Provider store={store}>
       <GlobalStyles />
-      <BrowserRouter basename="/kode-intership-2025-react/">
+			<BrowserRouter basename={ basename }>
         <Routes>
           <Route index element={<Index />} />
           <Route path="/:id" element={<PersonPage />} />
