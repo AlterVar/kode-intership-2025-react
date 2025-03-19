@@ -7,7 +7,7 @@ export type ModalStateType = {
 const isDark = window.matchMedia("(prefers-color-scheme: dark)");
 
 const initialState: ModalStateType = {
-  theme: isDark ? "dark" : "light",
+  theme: isDark.matches ? "dark" : "light",
 };
 
 export const configSlice = createSlice({

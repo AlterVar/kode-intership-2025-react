@@ -4,7 +4,6 @@ import { setTheme } from "../../app/features/configSlice";
 
 import { HiSun } from "react-icons/hi2";
 import { HiMoon } from "react-icons/hi2";
-import { useEffect } from "react";
 
 const Switch = styled.label`
   position: relative;
@@ -67,26 +66,15 @@ const Switch = styled.label`
 
 const Toggle = () => {
   const config = useAppSelector((state) => state.config);
-	const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-	const isDark: MediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
-	isDark.addEventListener("change", () => {
-		if (isDark) {
-			dispatch(setTheme("dark"));
-			return;
-		}
-		dispatch(setTheme("light"));
-	})
+  const changeTheme = () => {
+    return config.theme === "light"
+      ? dispatch(setTheme("dark"))
+      : dispatch(setTheme("light"));
+  };
 
-	useEffect(() => {
-		
-	}, [dispatch, isDark])
-	
-	const changeTheme = () => {
-		return config.theme === "light" ? dispatch(setTheme("dark")) : dispatch(setTheme("light"));
-	}
-	
-	return (
+  return (
     <Switch>
       <input
         type="checkbox"

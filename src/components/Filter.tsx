@@ -36,7 +36,7 @@ const Button = styled.button<{ $active?: boolean }>`
   box-sizing: border-box;
   cursor: pointer;
 
-  border-bottom: ${(props) => (props.$active ? "2px solid #6534ff" : "none")};
+  border-bottom: ${(props) => (props.$active ? `2px solid ${props.theme.highlight}` : "none")};
   font-size: 1.5rem;
   font-family: ${(props) =>
     props.$active
