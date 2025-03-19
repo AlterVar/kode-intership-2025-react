@@ -45,8 +45,8 @@ const GlobalStyles = createGlobalStyle`
 	}
 
 	body {
-		background-color: #fff;
-		color: #050510;
+		background-color: ${(props) => props.theme.bgPrimary};
+		color: ${(props) => props.theme.textPrimary};
 
 		&:has(.modalOpen) {
 			overflow: hidden;
@@ -58,7 +58,7 @@ const GlobalStyles = createGlobalStyle`
 		max-width: 1280px;
 		margin: 0 auto;
 		padding: 16px;
-		box-shadow: 0 0 50px 10px #f5f5f6;
+		box-shadow: 0 0 50px 10px ${(props) => props.theme.bgSecondary};
     box-sizing: border-box;
   	
 		display: flex; 

@@ -70,19 +70,19 @@ const Error = styled.main<{ $image: string }>`
     .title {
       font-family: "InterBold", sans-serif;
       font-size: 1.7rem;
-      color: #050510;
+      color: ${(props) => props.theme.textPrimary};
     }
 
     .description {
       font-family: "InterRegular", sans-serif;
       font-size: 1.6rem;
-      color: #97979b;
+      color: ${(props) => props.theme.textSecondary};
     }
 
     .try-again {
       font-family: "InterSemiBold", sans-serif;
       font-size: 1.6rem;
-      color: #6534ff;
+      color: ${(props) => props.theme.highlight};
       background-color: transparent;
       outline: none;
       border: none;

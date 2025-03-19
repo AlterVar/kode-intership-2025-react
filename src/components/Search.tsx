@@ -21,7 +21,7 @@ const Container = styled.div`
     .title {
       font-family: "InterBold", sans-serif;
       font-size: 2.4rem;
-      color: #050510;
+      color: ${(props) => props.theme.textPrimary};
       margin-bottom: 18px;
       margin-left: 8px;
     }
@@ -38,17 +38,17 @@ const SeachInput = styled.input`
   padding-left: 45px;
   border-radius: 16px;
   font-family: "InterRegular", sans-serif;
-  color: #050510;
+  color: ${(props) => props.theme.textPrimary};
   font-size: 1.5rem;
   line-height: 1.1;
-  background-color: #f7f7f8;
-  caret-color: #6534ff;
+  background-color: ${(props) => props.theme.bgSecondary};
+  caret-color: ${(props) => props.theme.highlight};
   box-sizing: border-box;
   outline: none;
   border: none;
 
   &::placeholder {
-    color: #c3c3c6;
+    color: ${(props) => props.theme.textTertiary};
     font-family: "InterMedium", sans-serif;
   }
 `;
@@ -59,7 +59,10 @@ const SearchIcon = styled.div<{ $active?: boolean }>`
   left: 12px;
 
   svg {
-    stroke: ${(props) => (props.$active ? "#050510" : "#c3c3c6")};
+    stroke: ${(props) =>
+      props.$active
+        ? `${props.theme.textPrimary}`
+        : `${props.theme.textTertiary}`};
     width: 20px;
     height: 20px;
   }
@@ -72,7 +75,10 @@ const SortIcon = styled.div<{ $birthdaySort?: boolean }>`
   cursor: pointer;
 
   svg {
-    stroke: ${(props) => (props.$birthdaySort ? "#6534ff" : "#c3c3c6")};
+    stroke: ${(props) =>
+      props.$birthdaySort
+        ? `${props.theme.highlight}`
+        : `${props.theme.textTertiary}`};
     width: 24px;
     height: 24px;
   }

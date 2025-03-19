@@ -13,7 +13,7 @@ const Dialog = styled.dialog`
   width: 373px;
   padding: 20px 23px 8px 17px;
   box-sizing: border-box;
-  background-color: #fff;
+  background-color: ${(props) => props.theme.bgPrimary};
   border: none;
   border-radius: 20px;
 
@@ -23,7 +23,7 @@ const Dialog = styled.dialog`
   transform: translate(-50%, -50%);
 
   &::backdrop {
-    background-color: rgba(5, 5, 16, 0.16);
+    background-color: ${(props) => props.theme.bgAdditional};
     cursor: pointer;
   }
 `;
@@ -41,7 +41,7 @@ const Header = styled.div`
   .title {
     font-family: "InterSemiBold", sans-serif;
     font-size: 2rem;
-    color: #050510;
+    color: ${(props) => props.theme.textPrimary};
     text-align: center;
     flex-grow: 1;
   }
@@ -52,7 +52,7 @@ const Header = styled.div`
     justify-content: center;
     flex-shrink: 0;
 
-    background-color: #f7f7f8;
+    background-color: ${(props) => props.theme.bgSecondary};
     width: 24px;
     height: 24px;
 
@@ -63,7 +63,7 @@ const Header = styled.div`
     cursor: pointer;
 
     svg {
-      fill: #c3c3c6;
+      fill: ${(props) => props.theme.bgTertiary};
       width: 16px;
       height: 16px;
     }
@@ -77,7 +77,7 @@ const RadioInput = styled.label`
   gap: 13px;
 
   font-family: "InterMedium", sans-serif;
-  color: #050510;
+  color: ${(props) => props.theme.textPrimary};
   font-size: 1.6rem;
 
   cursor: pointer;
@@ -95,7 +95,7 @@ const RadioInput = styled.label`
     width: 23px;
     height: 23px;
     border-radius: 50%;
-    border: 3px solid #6534ff;
+    border: 3px solid ${(props) => props.theme.highlight};
     box-sizing: border-box;
   }
 `;

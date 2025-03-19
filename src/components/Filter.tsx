@@ -24,7 +24,7 @@ const Container = styled.div`
     left: -16px;
     bottom: 0;
     width: calc(100% + 32px);
-    border-bottom: 1px solid #c3c3c6;
+    border-bottom: 1px solid ${(props) => props.theme.bgTertiary};
   }
 `;
 
@@ -42,7 +42,10 @@ const Button = styled.button<{ $active?: boolean }>`
     props.$active
       ? "'InterSemiBold', sans-serif"
       : "'InterMedium', sans-serif"};
-  color: ${(props) => (props.$active ? "#050510" : "#97979b")};
+  color: ${(props) =>
+    props.$active
+      ? `${props.theme.textPrimary}`
+      : `${props.theme.textSecondary}`};
 `;
 
 const Filter = () => {

@@ -1,6 +1,10 @@
 import styled from "styled-components";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setTheme } from "../../app/features/configSlice";
+
 import { HiSun } from "react-icons/hi2";
 import { HiMoon } from "react-icons/hi2";
+import { useEffect } from "react";
 
 const Switch = styled.label`
   position: relative;
@@ -11,13 +15,8 @@ const Switch = styled.label`
   input {
     display: none;
 
-    &:checked + .slider {
-      background-color: #c3c3c6;
-    }
-
     &:checked + .slider:before {
       transform: translateX(26px);
-      background-color: #f7f7f8;
     }
   }
 
@@ -27,7 +26,7 @@ const Switch = styled.label`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #f7f7f8;
+    background-color: ${(props) => props.theme.bgSecondary};
     transition: 0.4s;
     border-radius: 13px;
     cursor: pointer;
@@ -39,7 +38,7 @@ const Switch = styled.label`
       width: 20px;
       left: 4px;
       bottom: 4px;
-      background-color: #c3c3c6;
+      background-color: ${(props) => props.theme.bgTertiary};
       transition: 0.4s;
       border-radius: 50%;
       z-index: 5;
@@ -67,9 +66,33 @@ const Switch = styled.label`
 `;
 
 const Toggle = () => {
-  return (
+  const config = useAppSelector((state) => state.config);
+	const dispatch = useAppDispatch();
+
+	const isDark: MediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+	isDark.addEventListener("change", () => {
+		if (isDark) {
+			dispatch(setTheme("dark"));
+			return;
+		}
+		dispatch(setTheme("light"));
+	})
+
+	useEffect(() => {
+		
+	}, [dispatch, isDark])
+	
+	const changeTheme = () => {
+		return config.theme === "light" ? dispatch(setTheme("dark")) : dispatch(setTheme("light"));
+	}
+	
+	return (
     <Switch>
-      <input type="checkbox" />
+      <input
+        type="checkbox"
+        onChange={changeTheme}
+        checked={config.theme === "dark"}
+      />
       <span className="slider">
         <HiMoon />
         <HiSun />

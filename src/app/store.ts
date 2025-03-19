@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import peopleSlice from "./features/peopleSlice";
 import modalSlice from "./features/modalSlice";
 import searchSlice from "./features/searchSlice";
+import configSlice from "./features/configSlice";
 
 export const store = configureStore({
   reducer: {
     people: peopleSlice,
-		modal: modalSlice,
-		search: searchSlice,
+    modal: modalSlice,
+    search: searchSlice,
+    config: configSlice,
   },
 });
 

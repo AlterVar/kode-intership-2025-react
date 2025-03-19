@@ -9,13 +9,13 @@ const Conteiner = styled.div`
   hr {
     width: 100%;
     margin: 24px;
-    border-top: 1px solid #c3c3c6;
+    border-top: 1px solid ${(props) => props.theme.bgTertiary};
     border-radius: 1px;
   }
   p {
     font-family: "InterMedium", sans-serif;
     font-size: 1.5rem;
-    color: #c3c3c6;
+    color: ${(props) => props.theme.textTertiary};
   }
 `;
 

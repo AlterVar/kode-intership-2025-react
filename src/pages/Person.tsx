@@ -16,7 +16,7 @@ const Container = styled.section`
   min-height: 100vh;
   max-width: 1280px;
   margin: 0 auto;
-  box-shadow: 0 0 50px 10px #f5f5f6;
+  box-shadow: 0 0 50px 10px ${props => props.theme.bgSecondary};
 `;
 
 const Header = styled.header`
@@ -25,7 +25,7 @@ const Header = styled.header`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  background-color: #f7f7f8;
+  background-color: ${(props) => props.theme.bgSecondary};
 
   a {
     display: block;
@@ -34,7 +34,7 @@ const Header = styled.header`
     height: 24px;
 
     svg {
-      fill: #050510;
+      fill: ${(props) => props.theme.textPrimary};
       width: 18px;
       height: 16px;
     }
@@ -46,7 +46,7 @@ const Header = styled.header`
     justify-content: center;
     width: 104px;
     height: 104px;
-    background-color: #f7f7f8;
+    background-color: ${(props) => props.theme.bgSecondary};
 
     img {
       border-radius: 50%;
@@ -60,27 +60,27 @@ const Header = styled.header`
     h2 {
       font-family: "InterBold", sans-serif;
       font-size: 2.4rem;
-      color: #050510;
+      color: ${(props) => props.theme.textPrimary};
       padding: 12px 0;
 
       span {
         font-family: "InterRegular", sans-serif;
         font-size: 1.7rem;
-        color: #97979b;
+        color: ${(props) => props.theme.textSecondary};
       }
     }
 
     p {
       font-family: "InterRegular", sans-serif;
       font-size: 1.3rem;
-      color: #55555c;
+      color: ${(props) => props.theme.textAdditional};
     }
   }
 `;
 
 const Main = styled.main`
   padding: 26px 16px;
-  background-color: #fff;
+  background-color: ${(props) => props.theme.bgPrimary};
 `;
 
 const Info = styled.div`
@@ -102,7 +102,7 @@ const Info = styled.div`
     svg {
       width: 85%;
       height: 85%;
-      stroke: #050510;
+      stroke: ${(props) => props.theme.textPrimary};
     }
   }
 
@@ -111,13 +111,13 @@ const Info = styled.div`
   }
 
   .description {
-    color: #050510;
+    color: ${(props) => props.theme.textPrimary};
   }
 `;
 
 const Age = styled.p`
   margin-left: auto;
-  color: #97979b;
+  color: ${(props) => props.theme.textSecondary};
 `;
 
 const PersonPage = (): JSX.Element | null => {

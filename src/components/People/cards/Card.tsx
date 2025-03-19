@@ -84,7 +84,7 @@ const IdleCard = styled.li`
       height: 100%;
       border-radius: 50%;
       text-decoration: none;
-      color: #050510;
+      color: ${(props) => props.theme.textPrimary};
     }
   }
 
@@ -92,26 +92,26 @@ const IdleCard = styled.li`
     .person-name {
       font-family: "InterMedium", sans-serif;
       font-size: 1.6rem;
-      color: #050510;
+      color: ${(props) => props.theme.textPrimary};
 
       margin-bottom: 6px;
 
       .person-tag {
         font-size: 1.4rem;
-        color: #97979b;
+        color: ${(props) => props.theme.textSecondary};
       }
     }
 
     .person-position {
       font-family: "InterRegular", sans-serif;
       font-size: 1.3rem;
-      color: #55555c;
+      color: ${(props) => props.theme.textAdditional};
     }
   }
 `;
 
 const Birthday = styled.div`
-  color: #55555c;
+  color: ${(props) => props.theme.textAdditional};
   font-family: "IntelRegular", sans-serif;
   font-size: 1.5rem;
 
