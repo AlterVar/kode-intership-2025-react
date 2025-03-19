@@ -8,15 +8,23 @@ import { setSearchText, searchPeople } from "../app/features/peopleSlice";
 import { FiSearch } from "react-icons/fi";
 import { TbListTree } from "react-icons/tb";
 
+import Toggle from "./elements/Toggle";
+
 import { SortingType } from "../types/sortingType";
 
 const Container = styled.div`
-  .title {
-    font-family: "InterBold", sans-serif;
-    font-size: 2.4rem;
-    color: #050510;
-    margin-bottom: 18px;
-    margin-left: 8px;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      font-family: "InterBold", sans-serif;
+      font-size: 2.4rem;
+      color: #050510;
+      margin-bottom: 18px;
+      margin-left: 8px;
+    }
   }
 
   .input-container {
@@ -77,8 +85,8 @@ const Search = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-	const blur = (e: FocusEvent | FormEvent) => {
-		e.preventDefault();
+  const blur = (e: FocusEvent | FormEvent) => {
+    e.preventDefault();
     if (peopleState.search.length === 0 && peopleState.people.length === 0) {
       dispatch(setSearchText(" "));
       dispatch(searchPeople());
@@ -97,7 +105,10 @@ const Search = (): JSX.Element => {
 
   return (
     <Container>
-      <h2 className="title">Поиск</h2>
+      <div className="header">
+        <h2 className="title">Поиск</h2>
+        <Toggle />
+      </div>
       <div className="input-container">
         {searchState.active ? (
           <SearchIcon $active>
