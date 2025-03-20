@@ -86,6 +86,10 @@ export const peopleSlice = createSlice({
 					person.firstName + " " + person.lastName + " " + person.userTag;
 				return name.includes(state.search);
 			});
+			sort(state, {
+        type: "people/sortPeople",
+        payload: state.sorting,
+      });
 		},
 		sortPeople: (state, action) => {
 			state.sorting = action.payload;
