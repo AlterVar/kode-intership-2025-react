@@ -2,13 +2,12 @@ import styled from "styled-components";
 import { MouseEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
-  fetchPeople,
   setFilter,
   setSearchText,
 } from "../app/features/peopleSlice";
 import { disabled } from "../app/features/searchSlice";
 
-import RequestParamsType, { FilterType } from "../types/requestParamsType";
+import { FilterType } from "../types/requestParamsType";
 
 type departmentsType = keyof typeof FilterType;
 
@@ -17,13 +16,15 @@ const Container = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   position: relative;
+  padding-left: 16px;
+  padding-top: 8px;
 
   &::after {
     content: "";
     position: absolute;
-    left: -16px;
+    left: 0;
     bottom: 0;
-    width: calc(100% + 32px);
+    width: 100%;
     border-bottom: 1px solid ${(props) => props.theme.bgTertiary};
   }
 `;
@@ -36,7 +37,8 @@ const Button = styled.button<{ $active?: boolean }>`
   box-sizing: border-box;
   cursor: pointer;
 
-  border-bottom: ${(props) => (props.$active ? `2px solid ${props.theme.highlight}` : "none")};
+  border-bottom: ${(props) =>
+    props.$active ? `2px solid ${props.theme.highlight}` : "none"};
   font-size: 1.5rem;
   font-family: ${(props) =>
     props.$active
@@ -49,9 +51,7 @@ const Button = styled.button<{ $active?: boolean }>`
 `;
 
 const Filter = () => {
-  const filterState: RequestParamsType = useAppSelector(
-    (state) => state.people.filter
-  );
+  const peopleState = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
   const departmentsValues = Object.entries(FilterType);
 
@@ -66,26 +66,19 @@ const Filter = () => {
           __example: FilterType[filterDepartment as departmentsType],
         })
       );
-      dispatch(
-        fetchPeople({
-          __example: FilterType[filterDepartment as departmentsType],
-        })
-      );
     }
   };
 
   return (
     <Container>
       {departmentsValues.map((item: [string, FilterType], index: number) => {
-        if (item[1] === filterState.__example) {
-          return (
-            <Button key={index} $active onClick={loadDepartment}>
-              {item[0]}
-            </Button>
-          );
-        }
         return (
-          <Button key={index} onClick={loadDepartment}>
+          <Button
+            key={index}
+            $active={item[1] === peopleState.filter.__example}
+            onClick={loadDepartment}
+            disabled={peopleState.state === "loading"}
+          >
             {item[0]}
           </Button>
         );

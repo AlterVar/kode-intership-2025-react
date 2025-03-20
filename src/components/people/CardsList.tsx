@@ -1,4 +1,5 @@
 import { JSX, useEffect } from "react";
+import styled from "styled-components";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchPeople, PeopleStateType } from "../../app/features/peopleSlice";
@@ -11,6 +12,10 @@ import ErrorScreen from "../errors/ErrorScreen";
 import Card from "./cards/Card";
 import Divider from "../elements/Divider";
 
+const List = styled.ul`
+	padding: 10px 16px;
+`
+
 const CardsList = (): JSX.Element => {
   const peopleState: PeopleStateType = useAppSelector((state) => state.people);
   const searchState: searchStateType = useAppSelector((state) => state.search);
@@ -19,8 +24,8 @@ const CardsList = (): JSX.Element => {
   let dividerIsRendered = false;
 
   useEffect(() => {
-    dispatch(fetchPeople({ ...peopleState.filter }));
-    //*Uncomment to see the error screen on reload
+    dispatch(fetchPeople(peopleState.filter));
+    //*Uncomment to see the error screen on reload or on filter change
     //*dispatch(fetchPeople({ __code: "500" }));
   }, [dispatch, peopleState.filter]);
 
@@ -45,11 +50,11 @@ const CardsList = (): JSX.Element => {
   if (peopleState.state === "loading")
     return (
       <main>
-        <ul>
+        <List>
 					{Array.from({ length: 8 }, (_, index) => (
             <Card key={index} type="loading" />
           ))}
-        </ul>
+        </List>
       </main>
     );
 
@@ -58,7 +63,7 @@ const CardsList = (): JSX.Element => {
 
   return (
     <main>
-      <ul>
+      <List>
         {peopleState.people.map((person: PersonType) => {
           if (
             peopleState.sorting === SortingType.birthday &&
@@ -75,7 +80,7 @@ const CardsList = (): JSX.Element => {
           }
           return <Card key={person.id} person={person} type="idle" />;
         })}
-      </ul>
+      </List>
     </main>
   );
 };

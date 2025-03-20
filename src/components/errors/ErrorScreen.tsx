@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import { MouseEvent } from "react";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchPeople } from "../../app/features/peopleSlice";
 
 import ufo from "../../assets/images/requestError_ufo.png";
 import magnifier from "../../assets/images/searchError_magnifier.svg";
-
-import { FilterType } from "../../types/requestParamsType";
 
 type propsType = { type: errorType };
 type errorType = "loading" | "search" | "person" | "empty result";
@@ -93,12 +91,13 @@ const Error = styled.main<{ $image: string }>`
 
 const ErrorScreen = (props: propsType) => {
   const state = errorState[props.type];
-  const image = state.image;
+	const image = state.image;
+	const peopleState = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
 
   const reloadPeople = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(fetchPeople({ __example: FilterType["Все"] }));
+    dispatch(fetchPeople(peopleState.filter));
   };
 
   return (

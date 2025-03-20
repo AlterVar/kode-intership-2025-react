@@ -57,16 +57,13 @@ const GlobalStyles = createGlobalStyle`
 		min-width: 320px;
 		max-width: 1280px;
 		margin: 0 auto;
-		padding: 16px;
 		box-shadow: 0 0 50px 10px ${(props) => props.theme.bgSecondary};
     box-sizing: border-box;
   	
 		display: flex; 
 		flex-direction: column; 
-		gap: 14px;
 
 		min-height: 100vh;
-		
 	}
 
 	main {

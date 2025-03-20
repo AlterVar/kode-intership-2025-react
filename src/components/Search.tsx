@@ -1,9 +1,13 @@
-import { FormEvent, JSX } from "react";
+import { FormEvent, JSX, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { openModal } from "../app/features/modalSlice";
 import { active, disabled } from "../app/features/searchSlice";
-import { setSearchText, searchPeople } from "../app/features/peopleSlice";
+import {
+  setSearchText,
+  searchPeople,
+  fetchPeople,
+} from "../app/features/peopleSlice";
 
 import { FiSearch } from "react-icons/fi";
 import { TbListTree } from "react-icons/tb";
@@ -11,8 +15,14 @@ import { TbListTree } from "react-icons/tb";
 import Toggle from "./elements/Toggle";
 
 import { SortingType } from "../types/sortingType";
+import {
+  setNetworkOffline,
+  setNetworkOnline,
+} from "../app/features/configSlice";
 
-const Container = styled.div`
+const Container = styled.div<{ $loading: boolean }>`
+  padding: 16px;
+
   .header {
     display: flex;
     justify-content: space-between;
@@ -22,13 +32,21 @@ const Container = styled.div`
       font-family: "InterBold", sans-serif;
       font-size: 2.4rem;
       color: ${(props) => props.theme.textPrimary};
-      margin-bottom: 18px;
-      margin-left: 8px;
+      padding: 8px;
+      padding-bottom: 12px;
     }
   }
 
   .input-container {
     position: relative;
+  }
+
+  &:has(p) {
+    background-color: ${(props) =>
+      props.$loading ? props.theme.bgLoading : props.theme.bgError};
+    .header .title {
+      color: ${(props) => props.theme.textStatus};
+    }
   }
 `;
 
@@ -51,6 +69,13 @@ const SeachInput = styled.input`
     color: ${(props) => props.theme.textTertiary};
     font-family: "InterMedium", sans-serif;
   }
+`;
+
+const ConnectionStatus = styled.p`
+  font-family: "InterMedium", sans-serif;
+  font-size: 1.3rem;
+  color: ${(props) => props.theme.textStatus};
+  padding: 9px;
 `;
 
 const SearchIcon = styled.div<{ $active?: boolean }>`
@@ -88,7 +113,8 @@ const Search = (): JSX.Element => {
   const modalState = useAppSelector((state) => state.people.sorting);
   const searchState = useAppSelector((state) => state.search);
   const peopleState = useAppSelector((state) => state.people);
-
+  const config = useAppSelector((state) => state.config);
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
   const blur = (e: FocusEvent | FormEvent) => {
@@ -105,46 +131,71 @@ const Search = (): JSX.Element => {
     dispatch(disabled());
   };
 
-  const showModal = () => {
-    dispatch(openModal());
-  };
+	useEffect(() => {
+		const handleOnline = async () => {
+			dispatch(setNetworkOnline());
+      setLoading(true);
+      await dispatch(fetchPeople(peopleState.filter));
+      setLoading(false);
+    };
+
+		const handleOffline = () => dispatch(setNetworkOffline());
+		
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [dispatch, peopleState.filter, config.networkStatus]);
 
   return (
-    <Container>
+    <Container $loading={loading}>
       <div className="header">
         <h2 className="title">Поиск</h2>
         <Toggle />
       </div>
-      <div className="input-container">
-        {searchState.active ? (
-          <SearchIcon $active>
-            <FiSearch />
-          </SearchIcon>
-        ) : (
-          <SearchIcon>
-            <FiSearch />
-          </SearchIcon>
-        )}
-        <form onSubmit={blur}>
-          <SeachInput
-            type="text"
-            placeholder="Введи имя, тег, почту..."
-            value={searchState.active ? peopleState.search : ""}
-            onChange={(e) => dispatch(setSearchText(e.target.value))}
-            onFocus={() => dispatch(active())}
-            onBlur={blur}
-          />
-        </form>
-        {modalState === SortingType.birthday ? (
-          <SortIcon onClick={showModal} $birthdaySort>
-            <TbListTree />
-          </SortIcon>
-        ) : (
-          <SortIcon onClick={showModal}>
-            <TbListTree />
-          </SortIcon>
-        )}
-      </div>
+      {loading && peopleState.state === "loading" && (
+        <ConnectionStatus>Секундочку, гружусь...</ConnectionStatus>
+      )}
+      {config.networkStatus && !loading && (
+        <div className="input-container">
+          {searchState.active ? (
+            <SearchIcon $active>
+              <FiSearch />
+            </SearchIcon>
+          ) : (
+            <SearchIcon>
+              <FiSearch />
+            </SearchIcon>
+          )}
+          <form onSubmit={blur}>
+            <SeachInput
+              type="text"
+              placeholder="Введи имя, тег, почту..."
+              value={peopleState.search}
+              onChange={(e) => dispatch(setSearchText(e.target.value))}
+              onFocus={() => dispatch(active())}
+              onBlur={blur}
+            />
+          </form>
+          {modalState === SortingType.birthday ? (
+            <SortIcon onClick={() => dispatch(openModal())} $birthdaySort>
+              <TbListTree />
+            </SortIcon>
+          ) : (
+            <SortIcon onClick={() => dispatch(openModal())}>
+              <TbListTree />
+            </SortIcon>
+          )}
+        </div>
+      )}
+      {!config.networkStatus && !loading && (
+        <ConnectionStatus>
+          Не могу обновить данные. Проверь соединение с интернетом.
+        </ConnectionStatus>
+      )}
     </Container>
   );
 };

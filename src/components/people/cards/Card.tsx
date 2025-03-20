@@ -58,7 +58,6 @@ const LoadingCard = styled.li`
 `;
 
 const IdleCard = styled.li`
-  padding: 6px 0;
   list-style: none;
 
   a {

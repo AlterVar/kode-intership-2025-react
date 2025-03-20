@@ -7,9 +7,11 @@ export const lightTheme = {
   highlight: "#6534ff",
   bgPrimary: "#ffffff",
   bgSecondary: "#f7f7f8",
-	bgTertiary: "#c3c3c6",
-	bgAdditional: "rgba(5, 5, 16, 0.16)",
-  errorPrimary: "#f44336",
+  bgTertiary: "#c3c3c6",
+  bgAdditional: "rgba(5, 5, 16, 0.16)",
+  bgError: "#f44336",
+  bgLoading: "#6534ff",
+  textStatus: "#ffffff",
 };
 
 export const darkTheme = {
@@ -22,5 +24,7 @@ export const darkTheme = {
   bgSecondary: "#55555c",
   bgTertiary: "#c3c3c6",
   bgAdditional: "rgba(5, 5, 16, 0.46)",
-  errorPrimary: "#f44336",
+  bgError: "#795757",
+  bgLoading: "#424464",
+  textStatus: "#f7f7f8",
 };
