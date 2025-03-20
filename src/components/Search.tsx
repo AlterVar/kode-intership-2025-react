@@ -161,15 +161,9 @@ const Search = (): JSX.Element => {
       )}
       {config.networkStatus && !loading && (
         <div className="input-container">
-          {searchState.active ? (
-            <SearchIcon $active>
+            <SearchIcon $active={searchState.active}>
               <FiSearch />
             </SearchIcon>
-          ) : (
-            <SearchIcon>
-              <FiSearch />
-            </SearchIcon>
-          )}
           <form onSubmit={blur}>
             <SeachInput
               type="text"
@@ -177,7 +171,8 @@ const Search = (): JSX.Element => {
               value={peopleState.search}
               onChange={(e) => dispatch(setSearchText(e.target.value))}
               onFocus={() => dispatch(active())}
-              onBlur={blur}
+							onBlur={blur}
+							disabled={peopleState.state === "loading"}
             />
           </form>
           {modalState === SortingType.birthday ? (

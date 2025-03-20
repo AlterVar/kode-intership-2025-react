@@ -47,7 +47,12 @@ const Button = styled.button<{ $active?: boolean }>`
   color: ${(props) =>
     props.$active
       ? `${props.theme.textPrimary}`
-      : `${props.theme.textSecondary}`};
+		: `${props.theme.textSecondary}`};
+			
+			&:disabled {
+				opacity: 70%;
+				cursor: default;
+			}
 `;
 
 const Filter = () => {
