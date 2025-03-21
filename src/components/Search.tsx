@@ -21,18 +21,19 @@ import {
 } from "../app/features/configSlice";
 
 const Container = styled.div<{ $loading: boolean }>`
-  padding: 16px;
+  padding: 16px 16px 14px;
+	margin-bottom: 8px;
 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+		padding: 0 0 18px 8px;
 
     .title {
       font-family: "InterBold", sans-serif;
       font-size: 2.4rem;
       color: ${(props) => props.theme.textPrimary};
-      padding: 0 8px 14px 8px;
     }
   }
 
@@ -74,7 +75,7 @@ const ConnectionStatus = styled.p`
   font-family: "InterMedium", sans-serif;
   font-size: 1.3rem;
   color: ${(props) => props.theme.textStatus};
-  padding: 9px;
+  padding: 12px;
 `;
 
 const SearchIcon = styled.div<{ $active?: boolean }>`

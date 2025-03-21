@@ -8,6 +8,7 @@ import { darkTheme, lightTheme } from "./assets/styles/themes";
 
 import Index from "./pages/Index";
 import PersonPage from "./pages/Person";
+import { useEffect } from "react";
 
 function App() {
   const basename = import.meta.env.BASE_URL;
@@ -19,13 +20,18 @@ function App() {
     "(prefers-color-scheme: dark)"
 	);
 
-  isDark.addEventListener("change", () => {
-    if (isDark.matches) {
-      dispatch(setTheme("dark"));
-    } else {
-      dispatch(setTheme("light"));
-    }
-  });
+	useEffect(() => {
+		const changeTheme = () => {
+			if (isDark.matches) {
+        dispatch(setTheme("dark"));
+      } else {
+        dispatch(setTheme("light"));
+      }
+		}
+
+		isDark.addEventListener("change", changeTheme);
+		return () => isDark.removeEventListener("change", changeTheme);
+	}, [dispatch, isDark])
 
   return (
     <ThemeProvider theme={config.theme === "light" ? lightTheme : darkTheme}>

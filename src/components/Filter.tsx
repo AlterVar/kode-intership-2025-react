@@ -16,8 +16,7 @@ const Container = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   position: relative;
-  padding-left: 16px;
-  padding-top: 8px;
+  padding: 0 16px;
 
   &::after {
     content: "";
