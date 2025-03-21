@@ -134,7 +134,9 @@ const Search = (): JSX.Element => {
 		const handleOnline = async () => {
 			dispatch(setNetworkOnline());
       setLoading(true);
-      await dispatch(fetchPeople(peopleState.filter));
+			await dispatch(
+        fetchPeople({ params: peopleState.filter, cache: { override: true } })
+      );
       setLoading(false);
     };
 

@@ -24,7 +24,7 @@ const CardsList = (): JSX.Element => {
   let dividerIsRendered = false;
 
   useEffect(() => {
-    dispatch(fetchPeople(peopleState.filter));
+    dispatch(fetchPeople({ params: peopleState.filter }));
     //*Uncomment to see the error screen on reload or on filter change
     //*dispatch(fetchPeople({ __code: "500" }));
   }, [dispatch, peopleState.filter]);

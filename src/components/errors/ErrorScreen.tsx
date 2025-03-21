@@ -97,7 +97,7 @@ const ErrorScreen = (props: propsType) => {
 
   const reloadPeople = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(fetchPeople(peopleState.filter,));
+    dispatch(fetchPeople({params: peopleState.filter}));
   };
 
   return (

@@ -4,6 +4,10 @@ export default interface RequestParamsType {
   __example?: FilterType;
 }
 
+export type CacheConfig = {
+  override: true;
+};
+
 export enum FilterType {
   "Все" = "all",
   "Android" = "android",

@@ -3,7 +3,7 @@ import axios from "axios";
 import { setupCache } from "axios-cache-interceptor";
 
 import { PersonType } from "../../types/personType";
-import RequestParamsType, { FilterType } from "../../types/requestParamsType";
+import RequestParamsType, { CacheConfig, FilterType } from "../../types/requestParamsType";
 import { SortingType } from "../../types/sortingType";
 
 export type loadingState = "idle" | "loading" | "failed";
@@ -35,17 +35,26 @@ const axiosRequest = setupCache(instance, {
   },
 });
 
-export const fetchPeople = createAsyncThunk<PersonType[], RequestParamsType>(
+type ParamsType = {
+	params: RequestParamsType,
+	cache?: CacheConfig
+}
+
+export const fetchPeople = createAsyncThunk<PersonType[], ParamsType>(
   "features/fetchPeople",
-  async (params: RequestParamsType) => {
+  async ({ params, cache }) => {
     return axiosRequest
       .get(
         "https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users",
-        { params: params }
+        {
+          params,
+          cache,
+        }
       )
-			.then((response) => {
-				return response.data.items
-			});
+      .then((response) => {
+        return response.data.items;
+      })
+      .catch((error) => console.log(error));
   }
 );
 
@@ -126,8 +135,7 @@ export const peopleSlice = createSlice({
     });
     builder.addCase(fetchPeople.rejected, (state) => {
 			state.state = "failed";
-			/* if (state.people.length > 0)
-      state.people = []; */
+      state.people = [];
     });
   },
 });
