@@ -44,7 +44,7 @@ const CardsList = (): JSX.Element => {
 
   if (peopleState.state === "failed") return <ErrorScreen type="loading" />;
 
-  if (+searchState.active == 1 && peopleState.people.length === 0)
+  if (searchState.active && peopleState.people.length === 0)
     return <ErrorScreen type="search" />;
 
   if (peopleState.state === "loading")

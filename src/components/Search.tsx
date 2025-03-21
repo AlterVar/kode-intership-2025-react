@@ -32,8 +32,7 @@ const Container = styled.div<{ $loading: boolean }>`
       font-family: "InterBold", sans-serif;
       font-size: 2.4rem;
       color: ${(props) => props.theme.textPrimary};
-      padding: 8px;
-      padding-bottom: 12px;
+      padding: 0 8px 14px 8px;
     }
   }
 

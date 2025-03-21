@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { setupCache } from "axios-cache-interceptor";
 
 import { PersonType } from "../../types/personType";
 import RequestParamsType, { FilterType } from "../../types/requestParamsType";
@@ -26,15 +27,25 @@ const initialState: PeopleStateType = {
   },
 };
 
+const instance = axios.create();
+const axiosRequest = setupCache(instance, {
+  ttl: 1000 * 60 * 5,
+  cachePredicate: {
+    statusCheck: (status) => status >= 200 && status < 300,
+  },
+});
+
 export const fetchPeople = createAsyncThunk<PersonType[], RequestParamsType>(
   "features/fetchPeople",
   async (params: RequestParamsType) => {
-    return axios
+    return axiosRequest
       .get(
         "https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users",
         { params: params }
       )
-      .then((response) => response.data.items);
+			.then((response) => {
+				return response.data.items
+			});
   }
 );
 
@@ -104,17 +115,19 @@ export const peopleSlice = createSlice({
       state.state = "idle";
       state.people = action.payload;
       state.peopleOnFilter = action.payload;
-      sort(state, {
+			if (state.search.length > 0) {
+				peopleSlice.caseReducers.searchPeople(state);
+			} else {
+				sort(state, {
         type: "people/sortPeople",
         payload: state.sorting,
 			});
-			if (state.search.length > 0) {
-				peopleSlice.caseReducers.searchPeople(state);
 			}
     });
     builder.addCase(fetchPeople.rejected, (state) => {
-      state.state = "failed";
-      state.people = [];
+			state.state = "failed";
+			/* if (state.people.length > 0)
+      state.people = []; */
     });
   },
 });
