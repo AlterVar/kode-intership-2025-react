@@ -25,6 +25,7 @@ const Select = () => {
   const setLanguage = (value: string) => {
 		dispatch(changeLanguage(value));
 		i18next.changeLanguage(value);
+		localStorage.setItem("lang", value);
   };
 
   return (
