@@ -171,7 +171,7 @@ const Search = (): JSX.Element => {
         </Controls>
       </div>
       {loading && peopleState.state === "loading" && (
-        <ConnectionStatus>Секундочку, гружусь...</ConnectionStatus>
+        <ConnectionStatus>{t("network.loading")}</ConnectionStatus>
       )}
       {config.networkStatus && !loading && (
         <div className="input-container">
@@ -201,9 +201,7 @@ const Search = (): JSX.Element => {
         </div>
       )}
       {!config.networkStatus && !loading && (
-        <ConnectionStatus>
-          Не могу обновить данные. Проверь соединение с интернетом.
-        </ConnectionStatus>
+        <ConnectionStatus>{t("network.error")}</ConnectionStatus>
       )}
     </Container>
   );

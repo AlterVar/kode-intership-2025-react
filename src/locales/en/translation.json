@@ -7,6 +7,10 @@
     "title": "Search",
     "placeholder": "Enter name, tag..."
   },
+	"network": {
+		"error": "Can`t update data. Check your internet connection",
+		"loading": "Just a moment, loading..."
+	},
   "filter": {
     "all": "All",
     "android": "Android",

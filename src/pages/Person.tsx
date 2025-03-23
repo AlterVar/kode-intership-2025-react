@@ -9,7 +9,8 @@ import { FaRegStar } from "react-icons/fa6";
 import { LuPhone } from "react-icons/lu";
 
 import ErrorScreen from "../components/errors/ErrorScreen";
-import { t } from "i18next";
+import i18next, { t } from "i18next";
+import { changeLanguage } from "../app/features/configSlice";
 
 const Container = styled.section`
   min-height: 100vh;
@@ -123,15 +124,23 @@ const PersonPage = (): JSX.Element | null => {
   const params = useParams();
   const id = params.id;
 	const peopleState = useAppSelector((state) => state.people);
-	const language = useAppSelector((state) => state.config.language);
+	const config = useAppSelector((state) => state.config);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (peopleState.people.length === 0) {
+		if (peopleState.people.length === 0) {
+			const localLang = localStorage.getItem("lang");
+
+      if (!localLang) {
+        localStorage.setItem("lang", config.language);
+      } else {
+        dispatch(changeLanguage(localLang));
+      }
+      i18next.changeLanguage(config.language);
       /* dispatch(fetchPeople({params: { __code: "500" }})); */
       dispatch(fetchPeople({ params: { __example: "all"} }));
     }
-  }, [dispatch, peopleState.people.length]);
+  }, [config.language, dispatch, peopleState.people.length]);
 
   if (peopleState.state === "idle") {
     const person = peopleState.people.filter((person) => person.id === id)[0];
@@ -152,7 +161,7 @@ const PersonPage = (): JSX.Element | null => {
 
       if (age % 10 === 1) {
         result = age + " " + t("date.singular");
-      } else if (age % 10 < 5 && language.includes("ru")) {
+      } else if (age % 10 < 5 && config.language === "ru") {
         result = age + " года";
       } else {
         result = age + " " + t('date.plural');
@@ -162,12 +171,12 @@ const PersonPage = (): JSX.Element | null => {
     };
 
 		const formatBirthday = () => {
-			const formattedBirthday = birthday.toLocaleString(language, {
+			const formattedBirthday = birthday.toLocaleString(config.language, {
         day: "numeric",
         month: "long",
         year: "numeric",
 			});
-			if (language.includes("ru")) {
+			if (config.language.includes("ru")) {
 				return formattedBirthday.slice(0, -3);
 			}
 			return formattedBirthday;

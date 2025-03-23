@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build --base=/kode-intership-2025-react/ --sourcemap=true",
-    "buildPrev": "tsc -b && vite build --sourcemap=true",
+    "build_prev": "tsc -b && vite build --sourcemap=true",
     "lint": "eslint .",
     "preview": "vite preview"
   },

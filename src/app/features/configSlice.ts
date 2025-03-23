@@ -8,8 +8,7 @@ export type ModalStateType = {
 
 const isDark = window.matchMedia("(prefers-color-scheme: dark)");
 const isOnline = navigator.onLine;
-const language = navigator.language.slice(0, 2);
-console.log(language);
+const language = navigator.language.slice(0, 2) || navigator.languages[0].slice(0, 2);
 
 
 const initialState: ModalStateType = {
