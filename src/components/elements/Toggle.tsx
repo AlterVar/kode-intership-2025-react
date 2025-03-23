@@ -68,10 +68,15 @@ const Toggle = () => {
   const config = useAppSelector((state) => state.config);
   const dispatch = useAppDispatch();
 
-  const changeTheme = () => {
-    return config.theme === "light"
-      ? dispatch(setTheme("dark"))
-      : dispatch(setTheme("light"));
+	const changeTheme = () => {
+		if (config.theme === "light") {
+			dispatch(setTheme("dark"));
+			localStorage.setItem("theme", "dark");
+			return true;
+		}
+		dispatch(setTheme("light"));
+		localStorage.setItem("theme", "light");
+		return false;
   };
 
   return (

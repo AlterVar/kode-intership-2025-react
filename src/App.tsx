@@ -23,9 +23,11 @@ function App() {
 	useEffect(() => {
 		const changeTheme = () => {
 			if (isDark.matches) {
-        dispatch(setTheme("dark"));
+				dispatch(setTheme("dark"));
+				localStorage.setItem("theme", "dark");
       } else {
-        dispatch(setTheme("light"));
+				dispatch(setTheme("light"));
+				localStorage.setItem("theme", "light");
       }
 		}
 

@@ -10,7 +10,7 @@ import { LuPhone } from "react-icons/lu";
 
 import ErrorScreen from "../components/errors/ErrorScreen";
 import i18next, { t } from "i18next";
-import { changeLanguage } from "../app/features/configSlice";
+import { changeLanguage, setTheme } from "../app/features/configSlice";
 
 const Container = styled.section`
   min-height: 100vh;
@@ -130,6 +130,10 @@ const PersonPage = (): JSX.Element | null => {
   useEffect(() => {
 		if (peopleState.people.length === 0) {
 			const localLang = localStorage.getItem("lang");
+			const localTheme = localStorage.getItem("theme");
+			if (localTheme) {
+				dispatch(setTheme(localTheme));
+			}
 
       if (!localLang) {
         localStorage.setItem("lang", config.language);
