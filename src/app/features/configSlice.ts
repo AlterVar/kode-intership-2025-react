@@ -3,14 +3,19 @@ import { createSlice } from "@reduxjs/toolkit";
 export type ModalStateType = {
   theme: "light" | "dark";
 	networkStatus: boolean;
+	language: string;
 };
 
 const isDark = window.matchMedia("(prefers-color-scheme: dark)");
 const isOnline = navigator.onLine;
+const language = navigator.language.slice(0, 2);
+console.log(language);
+
 
 const initialState: ModalStateType = {
   theme: isDark.matches ? "dark" : "light",
   networkStatus: isOnline,
+  language: language,
 };
 
 export const configSlice = createSlice({
@@ -26,8 +31,12 @@ export const configSlice = createSlice({
     setNetworkOffline: (state) => {
       state.networkStatus = false;
     },
+    changeLanguage: (state, action) => {
+      state.language = action.payload;
+    },
   },
 });
 
-export const { setTheme, setNetworkOnline, setNetworkOffline } = configSlice.actions;
+export const { setTheme, setNetworkOnline, setNetworkOffline, changeLanguage } =
+  configSlice.actions;
 export default configSlice.reducer;

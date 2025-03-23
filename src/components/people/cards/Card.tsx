@@ -118,12 +118,13 @@ const Birthday = styled.div`
 `;
 
 const Card = ({ person, type }: propsType): JSX.Element => {
-  const peopleState: PeopleStateType = useAppSelector((state) => state.people);
+	const peopleState: PeopleStateType = useAppSelector((state) => state.people);
+	const language = useAppSelector((state) => state.config.language);
 
   const getBirthday = () => {
     const birthday = new Date(person!.birthday);
     const month = birthday
-      .toLocaleString("ru-RU", { month: "short" })
+      .toLocaleString(language, { month: "short" })
       .slice(0, 3);
     const day = birthday.getDate();
     return day + " " + month;

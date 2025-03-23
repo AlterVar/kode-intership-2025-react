@@ -7,9 +7,10 @@ import {
 } from "../app/features/peopleSlice";
 import { disabled } from "../app/features/searchSlice";
 
-import { FilterType } from "../types/requestParamsType";
+import { Departments } from "../types/requestParamsType";
+import { t } from "i18next";
 
-type departmentsType = keyof typeof FilterType;
+type FilterType = Departments | "all";
 
 const Container = styled.div`
   display: flex;
@@ -57,17 +58,17 @@ const Button = styled.button<{ $active?: boolean }>`
 const Filter = () => {
   const peopleState = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
-  const departmentsValues = Object.entries(FilterType);
+	const filtersValues = Object.entries(t("filter"));
 
-  const loadDepartment = (e: MouseEvent) => {
+  const loadDepartment = (e: MouseEvent, index: number) => {
     e.preventDefault();
     const filterDepartment = e.currentTarget.innerHTML;
-    if (filterDepartment in FilterType) {
+    if (filterDepartment as FilterType) {
       dispatch(setSearchText(""));
       dispatch(disabled());
       dispatch(
         setFilter({
-          __example: FilterType[filterDepartment as departmentsType],
+          __example: filtersValues[index][0],
         })
       );
     }
@@ -75,15 +76,15 @@ const Filter = () => {
 
   return (
     <Container>
-      {departmentsValues.map((item: [string, FilterType], index: number) => {
+      {filtersValues.map((item: [string, string], index: number) => {
         return (
           <Button
             key={index}
-            $active={item[1] === peopleState.filter.__example}
-            onClick={loadDepartment}
+            $active={item[0] === peopleState.filter.__example}
+            onClick={(e: MouseEvent) => loadDepartment(e, index)}
             disabled={peopleState.state === "loading"}
           >
-            {item[0]}
+            {item[1]}
           </Button>
         );
       })}

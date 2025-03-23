@@ -3,7 +3,9 @@ import axios from "axios";
 import { setupCache } from "axios-cache-interceptor";
 
 import { PersonType } from "../../types/personType";
-import RequestParamsType, { CacheConfig, FilterType } from "../../types/requestParamsType";
+import RequestParamsType, {
+  CacheConfig,
+} from "../../types/requestParamsType";
 import { SortingType } from "../../types/sortingType";
 
 export type loadingState = "idle" | "loading" | "failed";
@@ -23,7 +25,7 @@ const initialState: PeopleStateType = {
   sorting: SortingType.alphabetic,
   search: "",
   filter: {
-    __example: FilterType["Все"],
+    __example: "all",
   },
 };
 
@@ -36,30 +38,32 @@ const axiosRequest = setupCache(instance, {
 });
 
 type ParamsType = {
-	params: RequestParamsType,
-	cache?: CacheConfig
-}
+  params: RequestParamsType;
+  cache?: CacheConfig;
+};
 
 export const fetchPeople = createAsyncThunk<PersonType[], ParamsType>(
   "features/fetchPeople",
   async ({ params, cache }) => {
-    return axiosRequest
-      .get(
-        "https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users",
-        {
-          params,
-          cache,
-        }
-      )
-      .then((response) => {
-        return response.data.items;
-      })
-      .catch((error) => console.log(error));
+		return axiosRequest
+			.get(
+				"https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users",
+				{
+					params,
+					cache,
+				}
+			)
+			.then((response) => {
+				return response.data.items;
+			});
   }
 );
 
-const sort = (state: PeopleStateType, action: {payload: string, type: string}) => {
-	if (action.payload === SortingType.alphabetic) {
+const sort = (
+  state: PeopleStateType,
+  action: { payload: string; type: string }
+) => {
+  if (action.payload === SortingType.alphabetic) {
     state.people = state.people.slice().sort((a, b) => {
       const first = a.firstName + " " + a.lastName;
       const second = b.firstName + " " + b.lastName;
@@ -93,29 +97,31 @@ const sort = (state: PeopleStateType, action: {payload: string, type: string}) =
 export const peopleSlice = createSlice({
   name: "people",
   initialState,
-	reducers: {
-		setFilter: (state, action) => {
-			state.filter = { ...action.payload };
-		},
-		setSearchText: (state, action) => {
-			state.search = action.payload;
-		},
-		searchPeople: (state) => {
-			state.people = state.peopleOnFilter.filter((person) => {
-				const name =
-					person.firstName + " " + person.lastName + " " + person.userTag;
-				return name.includes(state.search);
-			});
-			sort(state, {
-        type: "people/sortPeople",
-        payload: state.sorting,
+  reducers: {
+    setFilter: (state, action) => {
+      state.filter = { ...action.payload };
+    },
+    setSearchText: (state, action) => {
+      state.search = action.payload;
+    },
+    searchPeople: (state) => {
+      state.people = state.peopleOnFilter.filter((person) => {
+        const name =
+          person.firstName + " " + person.lastName + " " + person.userTag;
+        return name.includes(state.search);
       });
-		},
-		sortPeople: (state, action) => {
-			state.sorting = action.payload;
-			sort(state, action);
-		},
-	},
+      if (state.people.length > 0) {
+        sort(state, {
+          type: "people/sortPeople",
+          payload: state.sorting,
+        });
+      }
+    },
+    sortPeople: (state, action) => {
+      state.sorting = action.payload;
+      sort(state, action);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPeople.pending, (state) => {
       state.state = "loading";
@@ -124,14 +130,14 @@ export const peopleSlice = createSlice({
       state.state = "idle";
       state.people = action.payload;
       state.peopleOnFilter = action.payload;
-			if (state.search.length > 0) {
-				peopleSlice.caseReducers.searchPeople(state);
-			} else {
-				sort(state, {
-        type: "people/sortPeople",
-        payload: state.sorting,
-			});
-			}
+      if (state.search.length > 0) {
+        peopleSlice.caseReducers.searchPeople(state);
+      } else {
+        sort(state, {
+          type: "people/sortPeople",
+          payload: state.sorting,
+        });
+      }
     });
     builder.addCase(fetchPeople.rejected, (state) => {
 			state.state = "failed";

@@ -19,16 +19,18 @@ import {
   setNetworkOffline,
   setNetworkOnline,
 } from "../app/features/configSlice";
+import { t } from "i18next";
+import Select from "./elements/Select";
 
 const Container = styled.div<{ $loading: boolean }>`
   padding: 16px 16px 14px;
-	margin-bottom: 8px;
+  margin-bottom: 8px;
 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-		padding: 0 0 18px 8px;
+    padding: 0 0 18px 8px;
 
     .title {
       font-family: "InterBold", sans-serif;
@@ -109,6 +111,13 @@ const SortIcon = styled.div<{ $birthdaySort?: boolean }>`
   }
 `;
 
+const Controls = styled.div`
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+`
+
 const Search = (): JSX.Element => {
   const modalState = useAppSelector((state) => state.people.sorting);
   const searchState = useAppSelector((state) => state.search);
@@ -131,18 +140,18 @@ const Search = (): JSX.Element => {
     dispatch(disabled());
   };
 
-	useEffect(() => {
-		const handleOnline = async () => {
-			dispatch(setNetworkOnline());
+  useEffect(() => {
+    const handleOnline = async () => {
+      dispatch(setNetworkOnline());
       setLoading(true);
-			await dispatch(
+      await dispatch(
         fetchPeople({ params: peopleState.filter, cache: { override: true } })
       );
       setLoading(false);
     };
 
-		const handleOffline = () => dispatch(setNetworkOffline());
-		
+    const handleOffline = () => dispatch(setNetworkOffline());
+
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
@@ -155,26 +164,29 @@ const Search = (): JSX.Element => {
   return (
     <Container $loading={loading}>
       <div className="header">
-        <h2 className="title">Поиск</h2>
-        <Toggle />
+        <h2 className="title">{t("search.title")}</h2>
+        <Controls>
+          <Select />
+          <Toggle />
+        </Controls>
       </div>
       {loading && peopleState.state === "loading" && (
         <ConnectionStatus>Секундочку, гружусь...</ConnectionStatus>
       )}
       {config.networkStatus && !loading && (
         <div className="input-container">
-            <SearchIcon $active={searchState.active}>
-              <FiSearch />
-            </SearchIcon>
+          <SearchIcon $active={searchState.active}>
+            <FiSearch />
+          </SearchIcon>
           <form onSubmit={blur}>
             <SeachInput
               type="text"
-              placeholder="Введи имя, тег, почту..."
+              placeholder={t("search.placeholder")}
               value={peopleState.search}
               onChange={(e) => dispatch(setSearchText(e.target.value))}
               onFocus={() => dispatch(active())}
-							onBlur={blur}
-							disabled={peopleState.state === "loading"}
+              onBlur={blur}
+              disabled={peopleState.state === "loading"}
             />
           </form>
           {modalState === SortingType.birthday ? (

@@ -1,0 +1,50 @@
+{
+	"date": {
+    "singular": "year old",
+		"plural": "years old"
+	},
+  "search": {
+    "title": "Search",
+    "placeholder": "Enter name, tag..."
+  },
+  "filter": {
+    "all": "All",
+    "android": "Android",
+    "ios": "iOS",
+    "design": "Design",
+    "management": "Management",
+    "qa": "QA",
+    "back_office": "Back-office",
+    "frontend": "Frontend",
+    "hr": "HR",
+    "pr": "PR",
+    "backend": "Backend",
+    "support": "Support",
+    "analytics": "Analytics"
+  },
+  "modal": {
+		"title": "Sorting",
+    "alphabetic": "By name",
+    "birthday": "By birthday"
+  },
+  "error": {
+    "loading": {
+      "title": "Some overmind broke everything",
+      "description": "We`ll fix it as soon as possible",
+      "button": "Try again"
+    },
+    "search": {
+      "title": "No one is there",
+      "description": "Try to change your search"
+    },
+    "person": {
+      "title": "Seems there`s no such person",
+      "description": "Perhaps he got lost",
+      "button": "Try again"
+    },
+    "empty_result": {
+      "title": "No one is there yet",
+      "description": "Add someone so we could find him"
+    }
+  }
+}

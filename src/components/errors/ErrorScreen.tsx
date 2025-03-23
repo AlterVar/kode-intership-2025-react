@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { MouseEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import i18n from "../../locales/i18n";
 import { fetchPeople } from "../../app/features/peopleSlice";
 
 import ufo from "../../assets/images/requestError_ufo.png";
@@ -19,25 +20,25 @@ type contentType = {
 const errorState: Record<errorType, contentType> = {
   loading: {
     image: ufo,
-    title: "Какой-то сверхразум все сломал",
-    description: "Постараемся быстро починить",
-    button: "Попробовать снова",
+    title: i18n.t("error.loading.title"),
+    description: i18n.t("error.loading.description"),
+    button: i18n.t("error.loading.button"),
   },
   search: {
     image: magnifier,
-    title: "Мы никого не нашли",
-    description: "Попробуй скорректировать запрос",
+    title: i18n.t("error.search.title"),
+    description: i18n.t("error.search.description"),
   },
   person: {
     image: magnifier,
-    title: "Кажется, такого человека не существует",
-    description: "Возможно, он потерялся",
-    button: "Попробовать найти снова",
+    title: i18n.t("error.person.title"),
+    description: i18n.t("error.person.description"),
+    button: i18n.t("error.person.button"),
   },
   "empty result": {
     image: magnifier,
-    title: "Здесь пока никого",
-    description: "Добавьте сотрудников, чтобы мы могли кого-нибудь найти",
+    title: i18n.t("error.empty_result.title"),
+    description: i18n.t("error.empty_result.description"),
   },
 };
 

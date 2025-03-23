@@ -26,7 +26,7 @@ const CardsList = (): JSX.Element => {
   useEffect(() => {
     dispatch(fetchPeople({ params: peopleState.filter }));
     //*Uncomment to see the error screen on reload or on filter change
-    //*dispatch(fetchPeople({ __code: "500" }));
+    //*dispatch(fetchPeople({params: { __code: "500" }}));
   }, [dispatch, peopleState.filter]);
 
   const checkYear = (person: PersonType) => {

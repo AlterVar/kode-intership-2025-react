@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { setTheme } from "./app/features/configSlice";
 
@@ -8,7 +9,6 @@ import { darkTheme, lightTheme } from "./assets/styles/themes";
 
 import Index from "./pages/Index";
 import PersonPage from "./pages/Person";
-import { useEffect } from "react";
 
 function App() {
   const basename = import.meta.env.BASE_URL;

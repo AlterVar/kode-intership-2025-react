@@ -1,5 +1,6 @@
 import { MouseEvent, RefObject, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { t } from "i18next";
 
 import styled from "styled-components";
 import { IoClose } from "react-icons/io5";
@@ -8,6 +9,7 @@ import { closeModal } from "../../app/features/modalSlice";
 import { sortPeople } from "../../app/features/peopleSlice";
 
 import { SortingType } from "../../types/sortingType";
+
 
 const Dialog = styled.dialog`
   width: 373px;
@@ -139,7 +141,7 @@ const SortModal = () => {
       <Dialog ref={dialog} onClick={hideModalUsingBackdrop}>
         <Content>
           <Header>
-            <h2 className="title">Сортировка</h2>
+            <h2 className="title">{t('modal.title')}</h2>
             <button onClick={hideModal}>
               <IoClose />
             </button>
@@ -154,7 +156,7 @@ const SortModal = () => {
                 defaultChecked={peopleState.sorting === SortingType.alphabetic}
               />
               <span />
-              По алфавиту
+              {t("modal.alphabetic")}
             </RadioInput>
             <RadioInput>
               <input
@@ -165,7 +167,7 @@ const SortModal = () => {
                 defaultChecked={peopleState.sorting === SortingType.birthday}
               />
               <span />
-              По дню рождения
+              {t("modal.birthday")}
             </RadioInput>
           </div>
         </Content>

@@ -8,9 +8,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa6";
 import { LuPhone } from "react-icons/lu";
 
-import { FilterType } from "../types/requestParamsType";
-
 import ErrorScreen from "../components/errors/ErrorScreen";
+import { t } from "i18next";
 
 const Container = styled.section`
   min-height: 100vh;
@@ -123,13 +122,14 @@ const Age = styled.p`
 const PersonPage = (): JSX.Element | null => {
   const params = useParams();
   const id = params.id;
-  const peopleState = useAppSelector((state) => state.people);
+	const peopleState = useAppSelector((state) => state.people);
+	const language = useAppSelector((state) => state.config.language);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (peopleState.people.length === 0) {
-      /* dispatch(fetchPeople({ __code: "500" })); */
-      dispatch(fetchPeople({ __example: FilterType["Все"] }));
+      /* dispatch(fetchPeople({params: { __code: "500" }})); */
+      dispatch(fetchPeople({ params: { __example: "all"} }));
     }
   }, [dispatch, peopleState.people.length]);
 
@@ -151,24 +151,26 @@ const PersonPage = (): JSX.Element | null => {
       }
 
       if (age % 10 === 1) {
-        result = age + " год";
-      } else if (age % 10 < 5) {
+        result = age + " " + t("date.singular");
+      } else if (age % 10 < 5 && language.includes("ru")) {
         result = age + " года";
       } else {
-        result = age + " лет";
+        result = age + " " + t('date.plural');
       }
 
       return result;
     };
 
-    const formatBirthday = () => {
-      return birthday
-        .toLocaleString("ru-RU", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })
-        .slice(0, -2);
+		const formatBirthday = () => {
+			const formattedBirthday = birthday.toLocaleString(language, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+			});
+			if (language.includes("ru")) {
+				return formattedBirthday.slice(0, -3);
+			}
+			return formattedBirthday;
     };
 
     const formatPhone = () => {

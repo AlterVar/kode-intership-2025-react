@@ -1,0 +1,50 @@
+{
+  "date": {
+    "singular": "год",
+    "plural": "лет"
+  },
+  "search": {
+    "title": "Поиск",
+    "placeholder": "Введите имя, тег..."
+  },
+  "filter": {
+    "all": "Все",
+    "android": "Android",
+    "ios": "iOS",
+    "design": "Дизайн",
+    "management": "Менеджмент",
+    "qa": "QA",
+    "back_office": "Бэк-офис",
+    "frontend": "Frontend",
+    "hr": "HR",
+    "pr": "PR",
+    "backend": "Backend",
+    "support": "Техподдержка",
+    "analytics": "Аналитика"
+  },
+  "modal": {
+    "title": "Сортировка",
+    "alphabetic": "По алфавиту",
+    "birthday": "По дню рождения"
+  },
+  "error": {
+    "loading": {
+      "title": "Какой-то сверхразум все сломал",
+      "description": "Постараемся быстро починить",
+      "button": "Попробовать снова"
+    },
+    "search": {
+      "title": "Мы никого не нашли",
+      "description": "Попробуй скорректировать запрос"
+    },
+    "person": {
+      "title": "Кажется, такого человека не существует",
+      "description": "Возможно, он потерялся",
+      "button": "Попробовать найти снова"
+    },
+    "empty_result": {
+      "title": "Здесь пока никого",
+      "description": "Добавьте сотрудников, чтобы мы могли кого-нибудь найти"
+    }
+  }
+}
