@@ -9,10 +9,9 @@ import { darkTheme, lightTheme } from "./assets/styles/themes";
 
 import Index from "./pages/Index";
 import PersonPage from "./pages/Person";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
-  const basename = import.meta.env.BASE_URL;
-
   const config = useAppSelector((state) => state.config);
 	const dispatch = useAppDispatch();
 
@@ -38,10 +37,11 @@ function App() {
   return (
     <ThemeProvider theme={config.theme === "light" ? lightTheme : darkTheme}>
       <GlobalStyles />
-      <BrowserRouter basename={basename}>
+      <BrowserRouter>
         <Routes>
           <Route index element={<Index />} />
           <Route path="/:id" element={<PersonPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
